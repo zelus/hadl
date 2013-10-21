@@ -1,5 +1,6 @@
 package M2;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class Configuration extends Element{

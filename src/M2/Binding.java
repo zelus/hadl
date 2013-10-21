@@ -35,9 +35,7 @@ public class Binding extends Link{
 		super(name);
 		this.topInterface = connectorInterface;
 		this.configurationInterface = configurationInterface;
-	})
-	
-	
+	}
 	
 	public Interface getComponentInterface() {
 		return this.ComponentInterface;
