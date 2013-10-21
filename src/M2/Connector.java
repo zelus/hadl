@@ -33,5 +33,8 @@ public class Connector extends Element {
 		return toRoles;
 	}
 	
+	public Configuration getSubConfig() {
+		return subConfig;
+	}
 	
 }

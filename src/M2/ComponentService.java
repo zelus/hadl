@@ -1,9 +1,16 @@
 package M2;
 
-public class ComponentService extends ComponentInterface {
+import java.util.ArrayList;
 
-	public ComponentService(String name, Component parent) {
+public abstract class ComponentService extends ComponentInterface {
+
+	private ArrayList<ComponentPort> usedPorts;
+	
+	public ComponentService(String name, Component parent, ArrayList<ComponentPort> usedPorts) {
 		super(name,parent);
+		this.usedPorts = usedPorts;
 	}
+	
+	public abstract Object run();
 	
 }

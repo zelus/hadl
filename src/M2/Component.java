@@ -51,5 +51,9 @@ public class Component extends Element {
 	public Collection<ComponentService> getReqServices() {
 		return reqServices;
 	}
+	
+	public Configuration getSubConfig() {
+		return subConfig;
+	}
 
 }
