@@ -1,6 +1,7 @@
 package M2;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class Connector extends Element {
 
@@ -25,11 +26,11 @@ public class Connector extends Element {
 		subConfig = config;
 	}
 	
-	public Collection<Connector> getFromRoles() {
+	public Collection<ConnectorRole> getFromRoles() {
 		return fromRoles;
 	}
 	
-	public Collection<Connector> getToRoles() {
+	public Collection<ConnectorRole> getToRoles() {
 		return toRoles;
 	}
 	
