@@ -16,7 +16,7 @@ public class Configuration extends Element{
 		connectors = new ArrayList<Connector>();
 		attachments = new ArrayList<Attachment>();
 		bindings = new ArrayList<Binding>();
-		configurationInterfaces = ArrayList<ConfigurationInterfaces>();
+		configurationInterfaces = new ArrayList<ConfigurationInterface>();
 	}
 
 	public void addComponent(Component component) {

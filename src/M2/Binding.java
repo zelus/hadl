@@ -5,17 +5,17 @@ import java.util.Collection;
 public class Binding extends Link{
 
 	private Interface topInterface;
-	private Interface configurationInterface;
+	private ConfigurationInterface configurationInterface;
 	
 	
 	// Binding between configuration and component
-	public Binding(String name, ComponentInterface componentInterface, ConfiguratonInterface configurationInterface) {
+	public Binding(String name, ComponentInterface componentInterface, ConfigurationInterface configurationInterface) {
 		super(name);
 		
 		int componentLevel = componentInterface.getParent().getLevel();
 		int configurationLevel = configurationInterface.getParent().getLevel();
 		Collection<Component> configurationComponents = configurationInterface.getParent().getComponents();
-		Configuration componentSubConfiguration = componentInterface.getParent().getSubConfiguration();
+		Configuration componentSubConfiguration = componentInterface.getParent().getSubConfig();
 		
 		if(componentLevel == (configurationLevel + 1)) {
 			//configuration is top level
@@ -31,18 +31,18 @@ public class Binding extends Link{
 		this.configurationInterface = configurationInterface;
 	}
 	
-	public Binding(String name, ConnectorInterface connectorInterface, ConfigurationInterface configurationInterface {
+	public Binding(String name, ConnectorInterface connectorInterface, ConfigurationInterface configurationInterface) {
 		super(name);
 		this.topInterface = connectorInterface;
 		this.configurationInterface = configurationInterface;
 	}
 	
-	public Interface getComponentInterface() {
-		return this.ComponentInterface;
+	public Interface getTopInterface() {
+		return this.topInterface;
 	}
 	
-	public Interface getBottomInterface() {
-		return this.bottomInterface;
+	public Interface getConfigurationInterface() {
+		return this.configurationInterface;
 	}
 
 }
