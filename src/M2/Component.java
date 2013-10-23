@@ -13,6 +13,12 @@ public abstract class Component extends Element {
 	
 	public Component(String name, int level) {
 		super(name,level);
+		
+		this.provPorts 		= new ArrayList<ComponentPort>();
+		this.reqPorts 		= new ArrayList<ComponentPort>();
+		this.provServices 	= new ArrayList<ComponentService>();
+		this.reqServices 	= new ArrayList<ComponentService>();
+		
 		subConfig = null;
 	}
 	

@@ -2,6 +2,9 @@ package M2;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
+
+import M2.exceptions.ConfigurationException;
 
 public class Configuration extends Element{
 	private ArrayList<Component> components;
@@ -55,8 +58,30 @@ public class Configuration extends Element{
 		configurationInterfaces.add(configInterface);
 	}
 	
+	public Component getComponent(String name) throws ConfigurationException {
+		Iterator<Component> it = components.iterator();
+		while(it.hasNext()) {
+			Component currentComponent = it.next();
+			if(currentComponent.getName().equals(name)) {
+				return currentComponent;
+			}
+		}
+		throw new ConfigurationException("No sub-component corresponding to the given name " + name);
+	}
+	
 	public Collection<Component> getComponents() {
 		return this.components;
+	}
+	
+	public Connector getConnector(String name) throws ConfigurationException {
+		Iterator<Connector> it = connectors.iterator();
+		while(it.hasNext()) {
+			Connector currentConnector = it.next();
+			if(currentConnector.getName().equals(name)) {
+				return currentConnector;
+			}
+		}
+		throw new ConfigurationException("No sub-connector corresponding to the given name " + name);
 	}
 	
 	public Collection<Connector> getConnectors() {
