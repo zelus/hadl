@@ -20,7 +20,7 @@ public class Configuration extends Element{
 	}
 
 	/**
-	 * Add the given component the the sub-component list.
+	 * Add the given component to the sub-component list.
 	 * 
 	 * The given component level is updated to the current one + 1,
 	 * to ensure level values consistency.
@@ -30,9 +30,19 @@ public class Configuration extends Element{
 		component.setLevel(this.getLevel()+1);
 		components.add(component);
 	}
+	
+	/**
+	 * Add the given component to the sup-connector list.
+	 * 
+	 * The given connector level is updated to the current one + 1,
+	 * to ensure level values consistency.
+	 * @param connector
+	 */
 	public void addConnector(Connector connector) {
+		connector.setLevel(this.getLevel() + 1);
 		connectors.add(connector);
 	}
+	
 	public void addAttachment(Attachment attachment) {
 		attachments.add(attachment);
 	}
