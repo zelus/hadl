@@ -3,7 +3,7 @@ package M2;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class Component extends Element {
+public abstract class Component extends Element {
 	
 	private ArrayList<ComponentPort> provPorts;
 	private ArrayList<ComponentPort> reqPorts;

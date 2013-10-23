@@ -19,7 +19,15 @@ public class Configuration extends Element{
 		configurationInterfaces = new ArrayList<ConfigurationInterface>();
 	}
 
+	/**
+	 * Add the given component the the sub-component list.
+	 * 
+	 * The given component level is updated to the current one + 1,
+	 * to ensure level values consistency.
+	 * @param component the component to add.
+	 */
 	public void addComponent(Component component) {
+		component.setLevel(this.getLevel()+1);
 		components.add(component);
 	}
 	public void addConnector(Connector connector) {

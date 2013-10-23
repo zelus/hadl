@@ -24,6 +24,10 @@ public class Element {
 	public void addProperty(Property property) {
 		properties.add(property);
 	}
+	
+	public void setLevel(int level) {
+		this.level = level;
+	}
 
 	public String getName() {
 		return name;
