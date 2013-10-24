@@ -1,6 +1,7 @@
 package M2;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 
 import M2.exceptions.ComponentServiceException;
@@ -18,20 +19,20 @@ public abstract class ComponentService extends ComponentInterface {
 	 * @throws ComponentServiceException when at least one port doesn't belong to 
 	 * the same parent component.
 	 */
-	public ComponentService(String name, Component parent, ArrayList<ComponentPort> usedPorts) throws ComponentServiceException {
+	public ComponentService(String name, Component parent, ComponentPort[] usedPorts) throws ComponentServiceException {
 		super(name,parent);
 		/*
 		 * Check if all the given ports belong to the same
 		 * parent as the current service
 		 */
-		Iterator<ComponentPort> it = usedPorts.iterator();
+		this.usedPorts = new ArrayList<ComponentPort>(Arrays.asList(usedPorts));
+		Iterator<ComponentPort> it = this.usedPorts.iterator();
 		while(it.hasNext()) {
 			String portParentName = it.next().getParent().getName();
 			if(!portParentName.equals(this.getParent().getName())) {
 				throw new ComponentServiceException("At least one of the used ports isn't associated to the service parent component");
 			}
 		}
-		this.usedPorts = usedPorts;
 	}
 	
 	public final Object call(Object input) {

@@ -10,8 +10,10 @@ public class App {
 			System.out.println("Launching cs");
 			ClientServerConfiguration csConfiguration = new ClientServerConfiguration();
 			System.out.println("Main configuration created");
+			
 			ClientComponent clientComponent = (ClientComponent)csConfiguration.getComponent("Client");
 			ServerComponent serverComponent = (ServerComponent)csConfiguration.getComponent("Server");
+			
 			System.out.println("csConfiguration sub-components : " + csConfiguration.getComponents().size());
 		}catch(Exception e) {
 			System.out.println(e.getMessage());

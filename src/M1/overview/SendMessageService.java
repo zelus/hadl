@@ -10,7 +10,7 @@ import M2.exceptions.ComponentServiceException;
 public class SendMessageService extends ComponentService {
 
 	public SendMessageService(Component parent,
-			ArrayList<ComponentPort> usedPorts)
+			ComponentPort[] usedPorts)
 			throws ComponentServiceException {
 		super("SendMessageService", parent, usedPorts);
 	}

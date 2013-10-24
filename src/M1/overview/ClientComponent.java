@@ -17,13 +17,7 @@ public class ClientComponent extends Component {
 		ReceiveRequestPort receiveRequestPort = new ReceiveRequestPort(this);
 		this.addReqPort(receiveRequestPort);
 		
-		// TODO update signature to allow easy service creation
-		// and maybe differenciate req to prov 
-		ArrayList<ComponentPort> sendMessagePorts = new ArrayList<ComponentPort>();
-		sendMessagePorts.add(sendRequestPort);
-		sendMessagePorts.add(receiveRequestPort);
-		
-		this.addProvService(new SendMessageService(this,sendMessagePorts));
+		this.addProvService(new SendMessageService(this, new ComponentPort[]{sendRequestPort,receiveRequestPort}));
 	}
 
 }
