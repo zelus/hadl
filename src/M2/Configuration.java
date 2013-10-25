@@ -88,5 +88,21 @@ public class Configuration extends Element{
 		return this.connectors;
 	}
 	
+	/**
+	 * Runtime function : process the flush of the ports required by the service.
+	 * @param componentService the service calling the runtime function.
+	 */
+	public void flushReqPorts(ComponentService componentService) {
+		// TODO Process the flush (by iterating through the attachments and bindings).
+	}
+	
+	/**
+	 * Runtime function : process the flush of the ports used by the service.
+	 * @param componentService the service calling the runtime function.
+	 */
+	public void flushProvPorts(ComponentService componentService) {
+		// TODO Process the flush (by iterating through the attachments and bindings).
+	}
+	
 }
 
