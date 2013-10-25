@@ -35,6 +35,20 @@ public abstract class ComponentService extends ComponentInterface {
 	}
 	
 	/**
+	 * @return the ports required by the current service.
+	 */
+	public Collection<ComponentPort> getReqPorts() {
+		return reqPorts;
+	}
+	
+	/**
+	 * @return the ports used by the current service.
+	 */
+	public Collection<ComponentPort> getProvPorts() {
+		return provPorts;
+	}
+	
+	/**
 	 * External service call method.
 	 * 
 	 * Call the user-defined method run and define the basic flush policy.
@@ -58,7 +72,7 @@ public abstract class ComponentService extends ComponentInterface {
 	 * The flush ensure that getValue() method backward has been executed.
 	 */
 	public final void flushReqPorts() {
-		
+		this.getParent().getParentConfig().flushReqPorts(this);
 	}
 	
 	/**
@@ -67,6 +81,7 @@ public abstract class ComponentService extends ComponentInterface {
 	 * The flush ensure that all the setValue() method forwards has been executed.
 	 */
 	public final void flushProvPorts() {
+		this.getParent().getParentConfig().flushProvPorts(this);
 		
 	}
 	
