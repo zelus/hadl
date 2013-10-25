@@ -2,6 +2,9 @@ package M2;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
+
+import M2.exceptions.ComponentException;
 
 public abstract class Component extends Element {
 	
@@ -42,16 +45,32 @@ public abstract class Component extends Element {
 		subConfig = config;
 	}
 	
+	public ComponentPort getProvPort(String portName) throws ComponentException {
+		return this.getPort(portName,provPorts);
+	}
+	
 	public Collection<ComponentPort> getProvPorts() {
 		return provPorts;
+	}
+	
+	public ComponentPort getReqPort(String portName) throws ComponentException {
+		return this.getPort(portName,reqPorts);
 	}
 	
 	public Collection<ComponentPort> getReqPorts() {
 		return reqPorts;
 	}
 	
+	public ComponentService getProvService(String serviceName) throws ComponentException {
+		return getService(serviceName,provServices);
+	}
+	
 	public Collection<ComponentService> getProvServices() {
 		return provServices;
+	}
+	
+	public ComponentService getReqService(String serviceName) throws ComponentException {
+		return getService(serviceName,reqServices);
 	}
 	
 	public Collection<ComponentService> getReqServices() {
@@ -60,6 +79,28 @@ public abstract class Component extends Element {
 	
 	public Configuration getSubConfig() {
 		return subConfig;
+	}
+	
+	private ComponentPort getPort(String portName, Collection<ComponentPort> portCollection) throws ComponentException {
+		Iterator<ComponentPort> it = portCollection.iterator();
+		while(it.hasNext()) {
+			ComponentPort currentPort = it.next();
+			if(currentPort.getName().equals(portName)) {
+				return currentPort;
+			}
+		}
+		throw new ComponentException("No port corresponding to the given name " + portName);
+	}
+	
+	private ComponentService getService(String serviceName, Collection<ComponentService> serviceCollection) throws ComponentException {
+		Iterator<ComponentService> it = serviceCollection.iterator();
+		while(it.hasNext()) {
+			ComponentService currentService = it.next();
+			if(currentService.getName().equals(serviceName)) {
+				return currentService;
+			}
+		}
+		throw new ComponentException("No service corresponding to the given name " + serviceName);
 	}
 
 }
