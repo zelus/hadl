@@ -19,6 +19,7 @@ public class App {
 			SendMessageService clientSendMessage = (SendMessageService)clientComponent.getProvService("SendMessageService");
 			
 			System.out.println(clientSendMessage.getName() + " activated");
+			
 		}catch(Exception e) {
 			System.out.println(e.getMessage());
 		}

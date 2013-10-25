@@ -2,6 +2,7 @@ package M2;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Iterator;
 
 import M2.exceptions.ComponentServiceException;
@@ -35,11 +36,11 @@ public abstract class ComponentService extends ComponentInterface {
 		}
 	}
 	
-	public final Object call(Object input) {
-		Object preparedObject = this.run(input);
+	public final Object call() {
+		// TODO get the values of the reqPorts
 		return new Object();
 	}
 	
-	protected abstract Object run(Object input);
+	protected abstract Object run(Collection<ComponentPort> reqPorts, Collection<ComponentPort> provPorts);
 	
 }
