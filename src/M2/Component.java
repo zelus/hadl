@@ -12,9 +12,10 @@ public abstract class Component extends Element {
 	private ArrayList<ComponentPort> reqPorts;
 	private ArrayList<ComponentService> provServices;
 	private ArrayList<ComponentService> reqServices;
+	private Configuration parentConfig;
 	private Configuration subConfig;
 	
-	public Component(String name, int level) {
+	public Component(String name, int level, Configuration parentConfig) {
 		super(name,level);
 		
 		this.provPorts 		= new ArrayList<ComponentPort>();
@@ -22,6 +23,7 @@ public abstract class Component extends Element {
 		this.provServices 	= new ArrayList<ComponentService>();
 		this.reqServices 	= new ArrayList<ComponentService>();
 		
+		this.parentConfig = parentConfig;
 		subConfig = null;
 	}
 	
@@ -79,6 +81,10 @@ public abstract class Component extends Element {
 	
 	public Configuration getSubConfig() {
 		return subConfig;
+	}
+	
+	public Configuration getParentConfig() {
+		return parentConfig;
 	}
 	
 	private ComponentPort getPort(String portName, Collection<ComponentPort> portCollection) throws ComponentException {
