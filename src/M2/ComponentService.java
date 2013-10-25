@@ -34,18 +34,55 @@ public abstract class ComponentService extends ComponentInterface {
 		checkPorts(this.provPorts);
 	}
 	
+	/**
+	 * External service call method.
+	 * 
+	 * Call the user-defined method run and define the basic flush policy.
+	 * @return the object returned by the run() method.
+	 */
 	public final Object call() {
 		/*
-		 * Prepare the required ports by calling their
-		 * prepareValue method. The runtime will process the
-		 * request and ensure all the reqPorts have their value accessible.
+		 * Tell to the configuration that a ComponentService is going to be
+		 * launch and it needs reqPorts values. The runtime will compute the request
+		 * and ensure that values are correctly set.
 		 */
-		return new Object();
+		flushReqPorts();
+		Object runResult = run(this.reqPorts, this.provPorts);
+		flushProvPorts();
+		return runResult;
 	}
 	
+	/**
+	 * Ask the runtime to flush all the required ports associated to the current service.
+	 * 
+	 * The flush ensure that getValue() method backward has been executed.
+	 */
+	public final void flushReqPorts() {
+		
+	}
+	
+	/**
+	 * Ask the runtime to flush all the provided ports associated to the current service.
+	 * 
+	 * The flush ensure that all the setValue() method forwards has been executed.
+	 */
+	public final void flushProvPorts() {
+		
+	}
+	
+	/**
+	 * User-defined run method.
+	 * @param reqPorts the required ports needed by the service.
+	 * @param provPorts the provided ports used by the service.
+	 * @return the result of the service execution.
+	 */
 	protected abstract Object run(Collection<ComponentPort> reqPorts, Collection<ComponentPort> provPorts);
 	
-	
+	/**
+	 * Check if all the given ports belongs to the same component as the current service
+	 * @param ports the ports to check to.
+	 * @throws ComponentServiceException if at least one of the given ports doesn't belongs to the service component.
+	 */
 	private void checkPorts(Collection<ComponentPort> ports) throws ComponentServiceException {
 		Iterator<ComponentPort> it = ports.iterator();
 		while(it.hasNext()) {
