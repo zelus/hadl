@@ -8,7 +8,7 @@ public class ReceiveRequestPort extends ComponentPort {
 	private String receiveBuffer;
 	
 	public ReceiveRequestPort(Component parent) {
-		super("ReceiveRequest", parent);
+		super("ReceiveRequestPort", parent);
 		receiveBuffer = new String();
 	}
 

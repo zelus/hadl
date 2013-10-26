@@ -60,9 +60,15 @@ public abstract class ComponentService extends ComponentInterface {
 		 * launch and it needs reqPorts values. The runtime will compute the request
 		 * and ensure that values are correctly set.
 		 */
+		System.out.println("[HADL-RUNTIME] Starting " + this.name + " service ...");
 		flushReqPorts();
 		Object runResult = run();
+		/*
+		 * Tell to the configuration that the service ended and the provPorts need to
+		 * be flush to update other component's required ports.
+		 */
 		flushProvPorts();
+		System.out.println("[HADL-RUNTIME] " + this.name + " service finish without error");
 		return runResult;
 	}
 	

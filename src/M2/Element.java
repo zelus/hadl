@@ -5,8 +5,8 @@ import java.util.Collection;
 
 public class Element {
 
-	private String name;
-	private int level;
+	protected String name;
+	protected int level;
 	private ArrayList<Constraint> constraints;
 	private ArrayList<Property> properties;
 	

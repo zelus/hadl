@@ -8,7 +8,7 @@ public class SendRequestPort extends ComponentPort {
 	private String sendBuffer;
 	
 	public SendRequestPort(Component parent) {
-		super("SendRequest", parent);
+		super("SendRequestPort", parent);
 		sendBuffer = new String();
 	}
 

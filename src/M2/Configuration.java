@@ -93,6 +93,7 @@ public class Configuration extends Element{
 	 * @param componentService the service calling the runtime function.
 	 */
 	public final void flushReqPorts(ComponentService componentService) {
+		System.out.println("[HADL-RUNTIME] Configuration " + this.name + " flushing required ports for " + componentService.getName() + " service");
 		// TODO Process the flush (by iterating through the attachments and bindings).
 	}
 	
@@ -101,6 +102,7 @@ public class Configuration extends Element{
 	 * @param componentService the service calling the runtime function.
 	 */
 	public final void flushProvPorts(ComponentService componentService) {
+		System.out.println("[HADL-RUNTIME] Configuration " + this.name + " flushing provided ports for " + componentService.getName() + " service");
 		// TODO Process the flush (by iterating through the attachments and bindings).
 	}
 	
