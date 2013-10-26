@@ -16,7 +16,10 @@ public class ClientComponent extends Component {
 		ReceiveRequestPort receiveRequestPort = new ReceiveRequestPort(this);
 		this.addReqPort(receiveRequestPort);
 		
-		this.addProvService(new SendMessageService(this, new ComponentPort[]{}, new ComponentPort[]{sendRequestPort}));
+		ClientUserInputPort clientUserInputPort = new ClientUserInputPort(this);
+		this.addReqPort(clientUserInputPort);
+		
+		this.addProvService(new SendMessageService(this, new ComponentPort[]{clientUserInputPort}, new ComponentPort[]{sendRequestPort}));
 	}
 
 }

@@ -1,5 +1,6 @@
 import M1.overview.ClientComponent;
 import M1.overview.ClientServerConfiguration;
+import M1.overview.ClientUserInputPort;
 import M1.overview.SendMessageService;
 import M1.overview.SendRequestPort;
 import M1.overview.ServerComponent;
@@ -17,8 +18,11 @@ public class App {
 			
 			System.out.println("csConfiguration sub-components : " + csConfiguration.getComponents().size());
 			
-			SendRequestPort clientSendRequestPort = (SendRequestPort)clientComponent.getProvPort("SendRequestPort");
-			clientSendRequestPort.setValue("Test request");
+			/*SendRequestPort clientSendRequestPort = (SendRequestPort)clientComponent.getProvPort("SendRequestPort");
+			clientSendRequestPort.setValue("Test request");*/
+			
+			ClientUserInputPort clientUserInputPort = (ClientUserInputPort)clientComponent.getReqPort("ClientUserInputPort");
+			clientUserInputPort.setValue("Test request");
 			
 			SendMessageService clientSendMessage = (SendMessageService)clientComponent.getProvService("SendMessageService");
 			clientSendMessage.call();

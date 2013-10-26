@@ -15,6 +15,7 @@ public class SendMessageService extends ComponentService {
 
 	@Override
 	protected Object run() {
+		this.provPorts.get(0).setValue(this.reqPorts.get(0).getValue());
 		return null;
 	}
 

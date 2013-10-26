@@ -20,6 +20,10 @@ public abstract class ConnectorRole extends ConnectorInterface {
 		return false;
 	}
 	
+	public final void flush() {
+		this.parent.getParentConfig().flushRole(this);
+	}
+	
 	public abstract void setValue(Object obj);
 	public abstract Object getValue();
 }

@@ -115,6 +115,28 @@ public class Configuration extends Element{
 					currentAttachment.getComponentPort().getParent().equals(componentService.getParent())) {
 				System.out.println("[HADL-RUNTIME] Propagating provided port " + currentAttachment.getComponentPort().getName() + " value to from role " + currentAttachment.getConnectorRole().getName());
 				currentAttachment.getConnectorRole().setValue(currentAttachment.getComponentPort().getValue());
+				System.out.println("[HADL-RUNTIME] Calling connector glue operation");
+				currentAttachment.getConnectorRole().getParent().getGlue().callGlue();
+			}
+		}
+	}
+	
+	/**
+	 * Runtime function : process the flush of the given role.
+	 * @param role the role calling the runtime function.
+	 */
+	public final void flushRole(ConnectorRole role) {
+		/*
+		 * Search in the attachment list if there is any attachment matching
+		 * the role asking for a flush.
+		 */
+		Iterator<Attachment> it = attachments.iterator();
+		while(it.hasNext()) {
+			Attachment currentAttachment = it.next();
+			if(currentAttachment.getConnectorRole().isToRole() &&
+					currentAttachment.getConnectorRole().getParent().equals(role.getParent())) {
+				System.out.println("[HADL-RUNTIME] Propagating to role " + currentAttachment.getConnectorRole().getName() + " value to required port " + currentAttachment.getComponentPort().getName());
+				currentAttachment.getComponentPort().setValue(currentAttachment.getConnectorRole().getValue());
 			}
 		}
 	}

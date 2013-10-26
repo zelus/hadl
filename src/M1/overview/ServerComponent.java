@@ -7,6 +7,9 @@ public class ServerComponent extends Component {
 
 	public ServerComponent(Configuration parent) {
 		super("Server", 0, parent);
+		
+		ServerReceiveRequestPort serverReceiveRequestPort = new ServerReceiveRequestPort(this);
+		this.addReqPort(serverReceiveRequestPort);
 	}
 
 }

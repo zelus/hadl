@@ -15,6 +15,8 @@ public class Attachment extends Link{
 	 * @param name the name of the attachment.
 	 * @param componentPort the component of the attachment.
 	 * @param connectorRole the connector of the attachment.
+	 * @throws AttachmentException if the attachment is not semantically correct (
+	 * attachments must be between provPort and fromRole or toRole and reqPort).
 	 */
 	public Attachment(String name, ComponentPort componentPort, ConnectorRole connectorRole) throws AttachmentException {
 		super(name);
@@ -35,6 +37,22 @@ public class Attachment extends Link{
 		else {
 			throw new AttachmentException("Invalid attachment, please connect a prov port to a from role or a req port to a to role");
 		}
+	}
+	
+	/**
+	 * Convenience constructor : create an attachment between the given connector
+	 * and the given component.
+	 * 
+	 * In HADL, attachment are not explicitly oriented, but to create an understandable
+	 * client code it may be useful to call this constructor.
+	 * @param name the name of the attachment.
+	 * @param componentPort the component of the attachment.
+	 * @param connectorRole the connector of the attachment.
+	 * @throws AttachmentException if the attachment is not semantically correct (
+	 * attachments must be between provPort and fromRole or toRole and reqPort).
+	 */
+	public Attachment(String name, ConnectorRole connectorRole, ComponentPort componentPort) throws AttachmentException {
+		this(name,componentPort,connectorRole);
 	}
 	
 	/**
