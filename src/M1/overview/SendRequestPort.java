@@ -15,7 +15,7 @@ public class SendRequestPort extends ComponentPort {
 	@Override
 	public void setValue(Object msg) {
 		sendBuffer = (String)msg;
-		System.out.println("[M1] " + name + " updated with the value \"" + sendBuffer + "\"" );
+		System.out.println("\t[M1] " + name + " updated with the value \"" + sendBuffer + "\"" );
 	}
 
 	@Override

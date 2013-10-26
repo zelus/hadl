@@ -15,7 +15,7 @@ public class ClientUserInputPort extends ComponentPort {
 	@Override
 	public void setValue(Object object) {
 		userInputBuffer = (String)object;
-		System.out.println("[M1] " + name + " updated with the value \"" + userInputBuffer + "\"" );
+		System.out.println("\t[M1] " + name + " updated with the value \"" + userInputBuffer + "\"" );
 	}
 
 	@Override
