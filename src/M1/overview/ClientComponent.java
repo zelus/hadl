@@ -1,15 +1,14 @@
 package M1.overview;
 
-import java.util.ArrayList;
-
 import M2.Component;
 import M2.ComponentPort;
+import M2.Configuration;
 import M2.exceptions.ComponentServiceException;
 
 public class ClientComponent extends Component {
 
-	public ClientComponent() throws ComponentServiceException {
-		super("Client", 0);
+	public ClientComponent(Configuration parent) throws ComponentServiceException {
+		super("Client", 0, parent);
 		
 		SendRequestPort sendRequestPort = new SendRequestPort(this);
 		this.addProvPort(sendRequestPort);
@@ -17,7 +16,7 @@ public class ClientComponent extends Component {
 		ReceiveRequestPort receiveRequestPort = new ReceiveRequestPort(this);
 		this.addReqPort(receiveRequestPort);
 		
-		this.addProvService(new SendMessageService(this, new ComponentPort[]{sendRequestPort,receiveRequestPort}));
+		this.addProvService(new SendMessageService(this, new ComponentPort[]{}, new ComponentPort[]{sendRequestPort}));
 	}
 
 }
