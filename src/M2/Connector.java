@@ -2,6 +2,7 @@ package M2;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 
 public class Connector extends Element {
 
@@ -26,8 +27,16 @@ public class Connector extends Element {
 		subConfig = config;
 	}
 	
+	public ConnectorRole getFromRole(String roleName) {
+		return this.getRole(roleName,fromRoles);
+	}
+	
 	public Collection<ConnectorRole> getFromRoles() {
 		return fromRoles;
+	}
+	
+	public ConnectorRole getToRole(String roleName) {
+		return this.getRole(roleName,toRoles);
 	}
 	
 	public Collection<ConnectorRole> getToRoles() {
@@ -38,4 +47,14 @@ public class Connector extends Element {
 		return subConfig;
 	}
 	
+	private ConnectorRole getRole(String roleName, Collection<ConnectorRole> roleCollection) {
+		Iterator<ConnectorRole> it = roleCollection.iterator();
+		while(it.hasNext()) {
+			ConnectorRole currentRole = it.next();
+			if(currentRole.getName().equals(roleName)) {
+				return currentRole;
+			}
+		}
+		return null;
+	}
 }

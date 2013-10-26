@@ -1,5 +1,7 @@
 package M2;
 
+import M2.exceptions.AttachmentException;
+
 public class Attachment extends Link{
 
 	private ComponentPort componentPort;
@@ -16,16 +18,20 @@ public class Attachment extends Link{
 	 */
 	public Attachment(String name, ComponentPort componentPort, ConnectorRole connectorRole) throws AttachmentException {
 		super(name);
-		Component parentComponent = componentPort.getParent();
-		Connector parentConnector = connectorRole.getParent();
 		/*
 		 * Check if the given configuration is acceptable. An acceptable configuration
 		 * must be one of the following :
 		 * 	- The component port is a provided port AND the connector role is a from role.
 		 * 	- The component port is a required port AND the connector role is a to role.
 		 */
-		this.componentPort = componentPort;
-		this.connectorRole = connectorRole;		
+		if((componentPort.isProvPort() && connectorRole.isFromRole()) ||
+				(componentPort.isReqPort() && connectorRole.isToRole())) {
+			this.componentPort = componentPort;
+			this.connectorRole = connectorRole;		
+		}
+		else {
+			throw new AttachmentException("Invalid attachment, please connect a prov port to a from role or a req port to a to role");
+		}
 	}
 	
 	/**
@@ -38,7 +44,7 @@ public class Attachment extends Link{
 	/**
 	 * @return the connector of the attachment.
 	 */
-	public Interface getConnectorRole() {
+	public ConnectorRole getConnectorRole() {
 		return this.connectorRole;
 	}
 }

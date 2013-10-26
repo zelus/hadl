@@ -2,7 +2,7 @@ package M2;
 
 public class ConnectorInterface extends Interface {
 
-	private Connector parent;
+	protected Connector parent;
 	
 	public ConnectorInterface(String name, Connector parent) {
 		super(name);

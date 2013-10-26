@@ -112,9 +112,10 @@ public class Configuration extends Element{
 		Iterator<Attachment> it = attachments.iterator();
 		while(it.hasNext()) {
 			Attachment currentAttachment = it.next();
-			if(componentService.getProvPorts().contains(currentAttachment.getProvInterface())) {
-				// find each attachment relative to the current service
-				//currentAttachment.getTo = getProv
+			if(currentAttachment.getComponentPort().isProvPort() &&
+					currentAttachment.getComponentPort().getParent().equals(componentService.getParent())) {
+				System.out.println("[HADL-RUNTIME] propagating provided port " + currentAttachment.getComponentPort().getName() + " value to from role " + currentAttachment.getConnectorRole().getName());
+				currentAttachment.getConnectorRole().setValue(currentAttachment.getComponentPort().getValue());
 			}
 		}
 	}
