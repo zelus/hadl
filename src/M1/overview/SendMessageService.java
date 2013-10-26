@@ -1,7 +1,5 @@
 package M1.overview;
 
-import java.util.ArrayList;
-
 import M2.Component;
 import M2.ComponentPort;
 import M2.ComponentService;
@@ -10,13 +8,13 @@ import M2.exceptions.ComponentServiceException;
 public class SendMessageService extends ComponentService {
 
 	public SendMessageService(Component parent,
-			ComponentPort[] usedPorts)
+			ComponentPort[] reqPorts, ComponentPort[] provPorts)
 			throws ComponentServiceException {
-		super("SendMessageService", parent, usedPorts);
+		super("SendMessageService", parent, reqPorts, provPorts);
 	}
 
 	@Override
-	protected Object run(Object input) {
+	protected Object run() {
 		return null;
 	}
 

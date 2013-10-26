@@ -9,8 +9,8 @@ import M2.exceptions.ComponentServiceException;
 
 public abstract class ComponentService extends ComponentInterface {
 
-	private ArrayList<ComponentPort> reqPorts;
-	private ArrayList<ComponentPort> provPorts;
+	protected ArrayList<ComponentPort> reqPorts;
+	protected ArrayList<ComponentPort> provPorts;
 	
 	/**
 	 * Create a new service associated to the given Component.
@@ -61,7 +61,7 @@ public abstract class ComponentService extends ComponentInterface {
 		 * and ensure that values are correctly set.
 		 */
 		flushReqPorts();
-		Object runResult = run(this.reqPorts, this.provPorts);
+		Object runResult = run();
 		flushProvPorts();
 		return runResult;
 	}
@@ -87,11 +87,9 @@ public abstract class ComponentService extends ComponentInterface {
 	
 	/**
 	 * User-defined run method.
-	 * @param reqPorts the required ports needed by the service.
-	 * @param provPorts the provided ports used by the service.
 	 * @return the result of the service execution.
 	 */
-	protected abstract Object run(Collection<ComponentPort> reqPorts, Collection<ComponentPort> provPorts);
+	protected abstract Object run();
 	
 	/**
 	 * Check if all the given ports belongs to the same component as the current service
