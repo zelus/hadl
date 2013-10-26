@@ -29,7 +29,7 @@ public class Configuration extends Element{
 	 * to ensure level values consistency.
 	 * @param component the component to add.
 	 */
-	public void addComponent(Component component) {
+	public final void addComponent(Component component) {
 		component.setLevel(this.getLevel()+1);
 		components.add(component);
 	}
@@ -41,24 +41,24 @@ public class Configuration extends Element{
 	 * to ensure level values consistency.
 	 * @param connector
 	 */
-	public void addConnector(Connector connector) {
+	public final void addConnector(Connector connector) {
 		connector.setLevel(this.getLevel() + 1);
 		connectors.add(connector);
 	}
 	
-	public void addAttachment(Attachment attachment) {
+	public final void addAttachment(Attachment attachment) {
 		attachments.add(attachment);
 	}
 	
-	public void addBinding(Binding binding) {
+	public final void addBinding(Binding binding) {
 		bindings.add(binding);
 	}
 	
-	public void addInterface(ConfigurationInterface configInterface) {
+	public final void addInterface(ConfigurationInterface configInterface) {
 		configurationInterfaces.add(configInterface);
 	}
 	
-	public Component getComponent(String name) throws ConfigurationException {
+	public final Component getComponent(String name) throws ConfigurationException {
 		Iterator<Component> it = components.iterator();
 		while(it.hasNext()) {
 			Component currentComponent = it.next();
@@ -69,11 +69,11 @@ public class Configuration extends Element{
 		throw new ConfigurationException("No sub-component corresponding to the given name " + name);
 	}
 	
-	public Collection<Component> getComponents() {
+	public final Collection<Component> getComponents() {
 		return this.components;
 	}
 	
-	public Connector getConnector(String name) throws ConfigurationException {
+	public final Connector getConnector(String name) throws ConfigurationException {
 		Iterator<Connector> it = connectors.iterator();
 		while(it.hasNext()) {
 			Connector currentConnector = it.next();
@@ -84,7 +84,7 @@ public class Configuration extends Element{
 		throw new ConfigurationException("No sub-connector corresponding to the given name " + name);
 	}
 	
-	public Collection<Connector> getConnectors() {
+	public final Collection<Connector> getConnectors() {
 		return this.connectors;
 	}
 	
@@ -92,7 +92,7 @@ public class Configuration extends Element{
 	 * Runtime function : process the flush of the ports required by the service.
 	 * @param componentService the service calling the runtime function.
 	 */
-	public void flushReqPorts(ComponentService componentService) {
+	public final void flushReqPorts(ComponentService componentService) {
 		// TODO Process the flush (by iterating through the attachments and bindings).
 	}
 	
@@ -100,7 +100,7 @@ public class Configuration extends Element{
 	 * Runtime function : process the flush of the ports used by the service.
 	 * @param componentService the service calling the runtime function.
 	 */
-	public void flushProvPorts(ComponentService componentService) {
+	public final void flushProvPorts(ComponentService componentService) {
 		// TODO Process the flush (by iterating through the attachments and bindings).
 	}
 	
