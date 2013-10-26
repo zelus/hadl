@@ -108,11 +108,13 @@ public class Configuration extends Element{
 		 * Search in the attachment list if there is any attachment matching
 		 * the service asking for a flush.
 		 */
+		ArrayList<ComponentPort> modifiedRoles = new ArrayList<ComponentPort>();
 		Iterator<Attachment> it = attachments.iterator();
 		while(it.hasNext()) {
 			Attachment currentAttachment = it.next();
 			if(componentService.getProvPorts().contains(currentAttachment.getProvInterface())) {
 				// find each attachment relative to the current service
+				//currentAttachment.getTo = getProv
 			}
 		}
 	}

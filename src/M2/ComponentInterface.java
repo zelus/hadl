@@ -2,7 +2,7 @@ package M2;
 
 public class ComponentInterface extends Interface {
 
-	private Component parent;
+	protected Component parent;
 	
 	public ComponentInterface(String name, Component parent) {
 		super(name);

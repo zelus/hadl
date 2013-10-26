@@ -47,7 +47,7 @@ public abstract class Component extends Element {
 		subConfig = config;
 	}
 	
-	public final ComponentPort getProvPort(String portName) throws ComponentException {
+	public final ComponentPort getProvPort(String portName) {
 		return this.getPort(portName,provPorts);
 	}
 	
@@ -55,7 +55,7 @@ public abstract class Component extends Element {
 		return provPorts;
 	}
 	
-	public final ComponentPort getReqPort(String portName) throws ComponentException {
+	public final ComponentPort getReqPort(String portName) {
 		return this.getPort(portName,reqPorts);
 	}
 	
@@ -63,7 +63,7 @@ public abstract class Component extends Element {
 		return reqPorts;
 	}
 	
-	public final ComponentService getProvService(String serviceName) throws ComponentException {
+	public final ComponentService getProvService(String serviceName) {
 		return getService(serviceName,provServices);
 	}
 	
@@ -71,7 +71,7 @@ public abstract class Component extends Element {
 		return provServices;
 	}
 	
-	public final ComponentService getReqService(String serviceName) throws ComponentException {
+	public final ComponentService getReqService(String serviceName) {
 		return getService(serviceName,reqServices);
 	}
 	
@@ -87,7 +87,7 @@ public abstract class Component extends Element {
 		return parentConfig;
 	}
 	
-	private final ComponentPort getPort(String portName, Collection<ComponentPort> portCollection) throws ComponentException {
+	private final ComponentPort getPort(String portName, Collection<ComponentPort> portCollection) {
 		Iterator<ComponentPort> it = portCollection.iterator();
 		while(it.hasNext()) {
 			ComponentPort currentPort = it.next();
@@ -95,10 +95,10 @@ public abstract class Component extends Element {
 				return currentPort;
 			}
 		}
-		throw new ComponentException("No port corresponding to the given name " + portName);
+		return null;
 	}
 	
-	private final ComponentService getService(String serviceName, Collection<ComponentService> serviceCollection) throws ComponentException {
+	private final ComponentService getService(String serviceName, Collection<ComponentService> serviceCollection) {
 		Iterator<ComponentService> it = serviceCollection.iterator();
 		while(it.hasNext()) {
 			ComponentService currentService = it.next();
@@ -106,7 +106,7 @@ public abstract class Component extends Element {
 				return currentService;
 			}
 		}
-		throw new ComponentException("No service corresponding to the given name " + serviceName);
+		return null;
 	}
 
 }

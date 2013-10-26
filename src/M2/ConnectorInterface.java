@@ -10,7 +10,7 @@ public class ConnectorInterface extends Interface {
 	}
 	
 	@Override
-	public Element getParent() {
+	public Connector getParent() {
 		return parent;
 	}
 
