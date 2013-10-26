@@ -104,6 +104,17 @@ public class Configuration extends Element{
 	public final void flushProvPorts(ComponentService componentService) {
 		System.out.println("[HADL-RUNTIME] Configuration " + this.name + " flushing provided ports for " + componentService.getName() + " service");
 		// TODO Process the flush (by iterating through the attachments and bindings).
+		/*
+		 * Search in the attachment list if there is any attachment matching
+		 * the service asking for a flush.
+		 */
+		Iterator<Attachment> it = attachments.iterator();
+		while(it.hasNext()) {
+			Attachment currentAttachment = it.next();
+			if(componentService.getProvPorts().contains(currentAttachment.getProvInterface())) {
+				// find each attachment relative to the current service
+			}
+		}
 	}
 	
 }
