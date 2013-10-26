@@ -27,67 +27,67 @@ public abstract class Component extends Element {
 		subConfig = null;
 	}
 	
-	public void addProvPort(ComponentPort i) {
+	public final void addProvPort(ComponentPort i) {
 		provPorts.add(i);
 	}
 	
-	public void addReqPort(ComponentPort i) {
+	public final void addReqPort(ComponentPort i) {
 		reqPorts.add(i);
 	}
 	
-	public void addProvService(ComponentService i) {
+	public final void addProvService(ComponentService i) {
 		provServices.add(i);
 	}
 	
-	public void addReqService(ComponentService i) {
+	public final void addReqService(ComponentService i) {
 		reqServices.add(i);
 	}
 	
-	public void setSubConfig(Configuration config) {
+	public final void setSubConfig(Configuration config) {
 		subConfig = config;
 	}
 	
-	public ComponentPort getProvPort(String portName) throws ComponentException {
+	public final ComponentPort getProvPort(String portName) throws ComponentException {
 		return this.getPort(portName,provPorts);
 	}
 	
-	public Collection<ComponentPort> getProvPorts() {
+	public final Collection<ComponentPort> getProvPorts() {
 		return provPorts;
 	}
 	
-	public ComponentPort getReqPort(String portName) throws ComponentException {
+	public final ComponentPort getReqPort(String portName) throws ComponentException {
 		return this.getPort(portName,reqPorts);
 	}
 	
-	public Collection<ComponentPort> getReqPorts() {
+	public final Collection<ComponentPort> getReqPorts() {
 		return reqPorts;
 	}
 	
-	public ComponentService getProvService(String serviceName) throws ComponentException {
+	public final ComponentService getProvService(String serviceName) throws ComponentException {
 		return getService(serviceName,provServices);
 	}
 	
-	public Collection<ComponentService> getProvServices() {
+	public final Collection<ComponentService> getProvServices() {
 		return provServices;
 	}
 	
-	public ComponentService getReqService(String serviceName) throws ComponentException {
+	public final ComponentService getReqService(String serviceName) throws ComponentException {
 		return getService(serviceName,reqServices);
 	}
 	
-	public Collection<ComponentService> getReqServices() {
+	public final Collection<ComponentService> getReqServices() {
 		return reqServices;
 	}
 	
-	public Configuration getSubConfig() {
+	public final Configuration getSubConfig() {
 		return subConfig;
 	}
 	
-	public Configuration getParentConfig() {
+	public final Configuration getParentConfig() {
 		return parentConfig;
 	}
 	
-	private ComponentPort getPort(String portName, Collection<ComponentPort> portCollection) throws ComponentException {
+	private final ComponentPort getPort(String portName, Collection<ComponentPort> portCollection) throws ComponentException {
 		Iterator<ComponentPort> it = portCollection.iterator();
 		while(it.hasNext()) {
 			ComponentPort currentPort = it.next();
@@ -98,7 +98,7 @@ public abstract class Component extends Element {
 		throw new ComponentException("No port corresponding to the given name " + portName);
 	}
 	
-	private ComponentService getService(String serviceName, Collection<ComponentService> serviceCollection) throws ComponentException {
+	private final ComponentService getService(String serviceName, Collection<ComponentService> serviceCollection) throws ComponentException {
 		Iterator<ComponentService> it = serviceCollection.iterator();
 		while(it.hasNext()) {
 			ComponentService currentService = it.next();
