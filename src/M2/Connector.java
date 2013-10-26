@@ -8,10 +8,16 @@ public class Connector extends Element {
 
 	private ArrayList<ConnectorRole> fromRoles;
 	private ArrayList<ConnectorRole> toRoles;
+	private Configuration parentConfig;
 	private Configuration subConfig;
 	
-	public Connector(String name, int level) {
+	public Connector(String name, int level, Configuration parentConfig) {
 		super(name,level);
+		
+		this.fromRoles = new ArrayList<ConnectorRole>();
+		this.toRoles = new ArrayList<ConnectorRole>();
+		
+		this.parentConfig = parentConfig;
 		subConfig = null;
 	}
 	
@@ -41,6 +47,10 @@ public class Connector extends Element {
 	
 	public Collection<ConnectorRole> getToRoles() {
 		return toRoles;
+	}
+	
+	public Configuration getParentConfig() {
+		return parentConfig;
 	}
 	
 	public Configuration getSubConfig() {

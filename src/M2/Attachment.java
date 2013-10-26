@@ -24,6 +24,9 @@ public class Attachment extends Link{
 		 * 	- The component port is a provided port AND the connector role is a from role.
 		 * 	- The component port is a required port AND the connector role is a to role.
 		 */
+		if(componentPort == null || connectorRole == null) {
+			throw new AttachmentException("Cannot create attachment from null");
+		}
 		if((componentPort.isProvPort() && connectorRole.isFromRole()) ||
 				(componentPort.isReqPort() && connectorRole.isToRole())) {
 			this.componentPort = componentPort;

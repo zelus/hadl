@@ -108,13 +108,12 @@ public class Configuration extends Element{
 		 * Search in the attachment list if there is any attachment matching
 		 * the service asking for a flush.
 		 */
-		ArrayList<ComponentPort> modifiedRoles = new ArrayList<ComponentPort>();
 		Iterator<Attachment> it = attachments.iterator();
 		while(it.hasNext()) {
 			Attachment currentAttachment = it.next();
 			if(currentAttachment.getComponentPort().isProvPort() &&
 					currentAttachment.getComponentPort().getParent().equals(componentService.getParent())) {
-				System.out.println("[HADL-RUNTIME] propagating provided port " + currentAttachment.getComponentPort().getName() + " value to from role " + currentAttachment.getConnectorRole().getName());
+				System.out.println("[HADL-RUNTIME] Propagating provided port " + currentAttachment.getComponentPort().getName() + " value to from role " + currentAttachment.getConnectorRole().getName());
 				currentAttachment.getConnectorRole().setValue(currentAttachment.getComponentPort().getValue());
 			}
 		}

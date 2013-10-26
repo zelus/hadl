@@ -79,12 +79,12 @@ public abstract class Component extends Element {
 		return reqServices;
 	}
 	
-	public final Configuration getSubConfig() {
-		return subConfig;
-	}
-	
 	public final Configuration getParentConfig() {
 		return parentConfig;
+	}
+	
+	public final Configuration getSubConfig() {
+		return subConfig;
 	}
 	
 	private final ComponentPort getPort(String portName, Collection<ComponentPort> portCollection) {
