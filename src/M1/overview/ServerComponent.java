@@ -12,7 +12,6 @@ public class ServerComponent extends Component {
 		this.addReqPort(serverReceiveRequestPort);
 		
 		this.setSubConfig(new ServerDetailsConfiguration(this));
-		System.out.println("test");
 	}
 
 }
