@@ -8,7 +8,7 @@ import java.util.Iterator;
  * Base element of architecture description, defines provided and required 
  * services and ports.
  * <p>
- * In HADL, a component can be atomic or composite.
+ * In HADL, a components can be atomic or composite.
  * 	<ul> 
  * 	 <li>
  *    A composite component contains a configuration that represents it 

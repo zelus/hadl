@@ -7,6 +7,24 @@ import java.util.Iterator;
 
 import M2.exceptions.ComponentServiceException;
 
+/**
+ * Defines a component service.
+ * <p>
+ * In HADL, a component service is associated to a set of required ports and
+ * a set of provided ports. Those ports can be accessed by dedicated methods.
+ * </p>
+ * <p>
+ * Component service also provides runtime methods to flush required and provided
+ * ports. Those methods are internally called by the runtime after and before 
+ * service execution to propagate its results.
+ * </p>
+ * <p>
+ * Client services must define the run method (which contains the base execution
+ * of the service). To call a service client must use the call() method, which 
+ * ensure consistent runtime execution (by flushing required and provided ports).
+ * </p>
+ * @author CaterpillarTeam
+ */
 public abstract class ComponentService extends ComponentInterface {
 
 	protected ArrayList<ComponentPort> reqPorts;
@@ -50,8 +68,9 @@ public abstract class ComponentService extends ComponentInterface {
 	
 	/**
 	 * External service call method.
-	 * 
+	 * <p>
 	 * Call the user-defined method run and define the basic flush policy.
+	 * </p>
 	 * @return the object returned by the run() method.
 	 */
 	public final Object call() {

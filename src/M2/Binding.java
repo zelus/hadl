@@ -1,48 +1,70 @@
 package M2;
 
-import java.util.Collection;
+import M2.exceptions.BindingException;
 
 public class Binding extends Link{
 
-	private Interface topInterface;
-	private ConfigurationInterface configurationInterface;
+	private ComponentPort componentPort1;
+	private ComponentPort componentPort2;
+	private ConnectorRole connectorRole1;
+	private ConnectorRole connectorRole2;
 	
 	
 	// Binding between configuration and component
-	public Binding(String name, ComponentInterface componentInterface, ConfigurationInterface configurationInterface) {
+	public Binding(String name, ComponentPort componentPort, ComponentPort configurationPort) throws BindingException {
 		super(name);
 		
-		int componentLevel = componentInterface.getParent().getLevel();
-		int configurationLevel = configurationInterface.getParent().getLevel();
-		Collection<Component> configurationComponents = configurationInterface.getParent().getComponents();
-		Configuration componentSubConfiguration = componentInterface.getParent().getSubConfig();
-		
-		if(componentLevel == (configurationLevel + 1)) {
-			//configuration is top level
-			
+		if(!checkLevel(componentPort, configurationPort)) {
+			throw new BindingException("Cannot create binding on non-adjacent levels");
 		}
-		else if(configurationLevel == componentLevel + 1) {
-			//component is top level
+		
+		if((componentPort.isReqPort() && configurationPort.isReqPort()) ||
+				componentPort.isProvPort() && configurationPort.isProvPort()) {
+			this.componentPort1 = componentPort;
+			this.componentPort2 = configurationPort;
 		}
 		else {
-			//Impossible to bind
+			throw new BindingException("Cannot create binding, please ensure that given ports are both provided or required");
 		}
-		this.topInterface = componentInterface;
-		this.configurationInterface = configurationInterface;
 	}
 	
-	public Binding(String name, ConnectorInterface connectorInterface, ConfigurationInterface configurationInterface) {
+	public Binding(String name, ConnectorRole connectorRole, ConnectorRole configurationRole) throws BindingException {
 		super(name);
-		this.topInterface = connectorInterface;
-		this.configurationInterface = configurationInterface;
+		
+		if(!checkLevel(connectorRole, configurationRole)) {
+			throw new BindingException("Cannot create binding on non-adjacent levels");
+		}
+		
+		if((connectorRole.isFromRole() && configurationRole.isFromRole()) ||
+				connectorRole.isToRole() && configurationRole.isToRole()) {
+			this.connectorRole1 = connectorRole;
+			this.connectorRole2 = configurationRole;
+		}
+		else {
+			throw new BindingException("Cannot create binding, please ensure that given roles are both from or to");
+		}
 	}
 	
-	public Interface getTopInterface() {
-		return this.topInterface;
+	public ComponentPort getComponentPort1() {
+		return this.componentPort1;
 	}
 	
-	public Interface getConfigurationInterface() {
-		return this.configurationInterface;
+	public ComponentPort getComponentPort2() {
+		return this.componentPort2;
+	}
+	
+	public ConnectorRole getConnectorRole1() {
+		return this.connectorRole1;
+	}
+	
+	public ConnectorRole getConnectorRole2() {
+		return this.connectorRole2;
+	}
+	
+	private boolean checkLevel(Interface i1, Interface i2) {
+		int i1Level = i1.getParent().getLevel();
+		int i2Level = i2.getParent().getLevel();
+		return(i1Level == i2Level+1 || i1Level == i2Level-1);
 	}
 
 }
