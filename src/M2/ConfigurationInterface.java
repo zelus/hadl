@@ -7,7 +7,7 @@ package M2;
  */
 public class ConfigurationInterface extends Interface{
 
-	private Configuration parent;
+	protected Configuration parent;
 	
 	/**
 	 * Create a configuration interface with the given name and parent.

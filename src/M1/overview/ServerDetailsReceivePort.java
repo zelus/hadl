@@ -1,13 +1,13 @@
 package M1.overview;
 
-import M2.Component;
-import M2.ComponentPort;
+import M2.Configuration;
+import M2.ConfigurationPort;
 
-public class ServerDetailsReceivePort extends ComponentPort {
+public class ServerDetailsReceivePort extends ConfigurationPort {
 
 	private String receiveBuffer;
 	
-	public ServerDetailsReceivePort(Component parent) {
+	public ServerDetailsReceivePort(Configuration parent) {
 		super("ServerDetailsReceivePort",parent);
 		this.receiveBuffer = new String();
 	}

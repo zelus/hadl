@@ -39,10 +39,10 @@ public class Configuration extends Element {
 	
 	private int configurationType;
 	protected Element parent;
-	private ArrayList<ComponentPort> reqPorts;
-	private ArrayList<ComponentPort> provPorts;
-	private ArrayList<ConnectorRole> fromRoles;
-	private ArrayList<ConnectorRole> toRoles;
+	private ArrayList<ConfigurationPort> reqPorts;
+	private ArrayList<ConfigurationPort> provPorts;
+	private ArrayList<ConfigurationRole> fromRoles;
+	private ArrayList<ConfigurationRole> toRoles;
 	
 	/**
 	 * Create a configuration with the given name and architectural level.
@@ -57,12 +57,12 @@ public class Configuration extends Element {
 		bindings = new ArrayList<Binding>();
 		this.configurationType = configurationType;
 		if(configurationType == COMPONENT_TYPE) {
-			provPorts = new ArrayList<ComponentPort>();
-			reqPorts = new ArrayList<ComponentPort>();
+			provPorts = new ArrayList<ConfigurationPort>();
+			reqPorts = new ArrayList<ConfigurationPort>();
 		}
 		else if(configurationType == CONNECTOR_TYPE) {
-			fromRoles = new ArrayList<ConnectorRole>();
-			toRoles = new ArrayList<ConnectorRole>();
+			fromRoles = new ArrayList<ConfigurationRole>();
+			toRoles = new ArrayList<ConfigurationRole>();
 		}
 		else {
 			throw new ConfigurationException("Invalid configuration type");
@@ -115,7 +115,7 @@ public class Configuration extends Element {
 		bindings.add(binding);
 	}
 	
-	public final void addProvPort(ComponentPort i) throws ConfigurationException {
+	public final void addProvPort(ConfigurationPort i) throws ConfigurationException {
 		if(representComponent()) {
 			provPorts.add(i);
 		}
@@ -124,7 +124,7 @@ public class Configuration extends Element {
 		}
 	}
 	
-	public final void addReqPort(ComponentPort i) throws ConfigurationException {
+	public final void addReqPort(ConfigurationPort i) throws ConfigurationException {
 		if(representComponent()) {
 			reqPorts.add(i);
 		}
@@ -133,7 +133,7 @@ public class Configuration extends Element {
 		}
 	}
 	
-	public final void addFromRole(ConnectorRole i) throws ConfigurationException {
+	public final void addFromRole(ConfigurationRole i) throws ConfigurationException {
 		if(representConnector()) {
 			fromRoles.add(i);
 		}
@@ -142,7 +142,7 @@ public class Configuration extends Element {
 		}
 	}
 	
-	public final void addToRole(ConnectorRole i) throws ConfigurationException {
+	public final void addToRole(ConfigurationRole i) throws ConfigurationException {
 		if(representConnector()) {
 			toRoles.add(i);
 		}
@@ -197,6 +197,46 @@ public class Configuration extends Element {
 		return this.connectors;
 	}
 	
+	public final ConfigurationPort getProvPort(String portName) {
+		// TODO error if not representing a component
+		return this.getPort(portName,provPorts);
+	}
+
+	public final Collection<ConfigurationPort> getProvPorts() {
+		// TODO error if not representing a component
+		return provPorts;
+	}
+	
+	public final ConfigurationPort getReqPort(String portName) {
+		// TODO error if not representing a component
+		return this.getPort(portName,reqPorts);
+	}
+	
+	public final Collection<ConfigurationPort> getReqPorts() {
+		// TODO error if not representing a component
+		return reqPorts;
+	}
+	
+	public ConfigurationRole getFromRole(String roleName) {
+		// TODO error if not representing a connector
+		return this.getRole(roleName,fromRoles);
+	}
+
+	public Collection<ConfigurationRole> getFromRoles() {
+		// TODO error if not representing a connector
+		return fromRoles;
+	}
+	
+	public ConfigurationRole getToRole(String roleName) {
+		// TODO error if not representing a connector
+		return this.getRole(roleName,toRoles);
+	}
+
+	public Collection<ConfigurationRole> getToRoles() {
+		// TODO error if not representing a connector
+		return toRoles;
+	}
+	
 	/**
 	 * Runtime function : process the flush of the ports used by the service.
 	 * @param componentService the service calling the runtime function.
@@ -219,8 +259,9 @@ public class Configuration extends Element {
 			if(currentAttachment.getComponentPort().equals(elementInterface)) {
 				System.out.println("[HADL-RUNTIME] Propagating port " + currentAttachment.getComponentPort().getName() + " value to role " + currentAttachment.getConnectorRole().getName());
 				currentAttachment.getConnectorRole().setValue(currentAttachment.getComponentPort().getValue());
-				boolean binded = this.bind(currentAttachment.getConnectorRole());
-				if(!binded) {
+				boolean upBinded = this.bind(currentAttachment.getConnectorRole(),this);
+				boolean downBinded = this.bind(currentAttachment.getConnectorRole(), currentAttachment.getConnectorRole().getParent().getSubConfig());
+				if(!downBinded) {
 					System.out.println("[HADL-RUNTIME] Calling connector glue operation");
 					/*
 					 * Glue call will call recursively flush operation.
@@ -238,34 +279,39 @@ public class Configuration extends Element {
 				 * Bind the port if needed, but this has no more effects, there is
 				 * no glue to call.
 				 */
-				this.bind(currentAttachment.getComponentPort());
+				// first upbinded, then down binded
+				this.bind(currentAttachment.getComponentPort(),this);
+				this.bind(currentAttachment.getComponentPort(), currentAttachment.getComponentPort().getParent().getSubConfig());
 			}
 		}
 	}
 	
-	public final boolean bind(Interface elementInterface) {
+	public final boolean bind(Interface elementInterface, Configuration bindWith) {
+		if(bindWith == null) {
+			return false;
+		}
 		boolean result = false;
-		Iterator<Binding> it = bindings.iterator();
+		Iterator<Binding> it = bindWith.bindings.iterator();
 		while(it.hasNext()) {
 			Binding currentBinding = it.next();
-			if(elementInterface.equals(currentBinding.getComponentPort1())) {
-				System.out.println("[HADL-RUNTIME] Binding port " + elementInterface.getName() + " to port " + currentBinding.getComponentPort2());
-				currentBinding.getComponentPort2().setValue(currentBinding.getComponentPort1().getValue());
+			if(elementInterface.equals(currentBinding.getComponentPort())) {
+				System.out.println("[HADL-RUNTIME] Binding port " + elementInterface.getName() + " to port " + currentBinding.getConfigurationPort());
+				currentBinding.getConfigurationPort().setValue(currentBinding.getComponentPort().getValue());
 				result = true;
 			}
-			if(elementInterface.equals(currentBinding.getComponentPort2())) {
-				System.out.println("[HADL-RUNTIME] Binding port " + elementInterface.getName() + " to port " + currentBinding.getComponentPort1());
-				currentBinding.getComponentPort1().setValue(currentBinding.getComponentPort2().getValue());
+			if(elementInterface.equals(currentBinding.getConfigurationPort())) {
+				System.out.println("[HADL-RUNTIME] Binding port " + elementInterface.getName() + " to port " + currentBinding.getComponentPort());
+				currentBinding.getComponentPort().setValue(currentBinding.getConfigurationPort().getValue());
 				result = true;
 			}
-			if(elementInterface.equals(currentBinding.getConnectorRole1())) {
-				System.out.println("[HADL-RUNTIME] Binding role " + elementInterface.getName() + " to role " + currentBinding.getConnectorRole2());
-				currentBinding.getConnectorRole2().setValue(currentBinding.getConnectorRole1().getValue());
+			if(elementInterface.equals(currentBinding.getConnectorRole())) {
+				System.out.println("[HADL-RUNTIME] Binding role " + elementInterface.getName() + " to role " + currentBinding.getConfigurationRole());
+				currentBinding.getConfigurationRole().setValue(currentBinding.getConnectorRole().getValue());
 				result = true;
 			}
-			if(elementInterface.equals(currentBinding.getConnectorRole2())) {
-				System.out.println("[HADL-RUNTIME] Binding role " + elementInterface.getName() + " to role " + currentBinding.getConnectorRole1());
-				currentBinding.getConnectorRole1().setValue(currentBinding.getConnectorRole2().getValue());
+			if(elementInterface.equals(currentBinding.getConfigurationRole())) {
+				System.out.println("[HADL-RUNTIME] Binding role " + elementInterface.getName() + " to role " + currentBinding.getConnectorRole());
+				currentBinding.getConnectorRole().setValue(currentBinding.getConfigurationRole().getValue());
 				result = true;
 			}
 		}
@@ -278,6 +324,28 @@ public class Configuration extends Element {
 	
 	private boolean representConnector() {
 		return(configurationType == CONNECTOR_TYPE);
+	}
+	
+	private ConfigurationPort getPort(String portName, Collection<ConfigurationPort> portCollection) {
+		Iterator<ConfigurationPort> it = portCollection.iterator();
+		while(it.hasNext()) {
+			ConfigurationPort currentPort = it.next();
+			if(currentPort.getName().equals(portName)) {
+				return currentPort;
+			}
+		}
+		return null;
+	}
+	
+	private ConfigurationRole getRole(String roleName, Collection<ConfigurationRole> roleCollection) {
+		Iterator<ConfigurationRole> it = roleCollection.iterator();
+		while(it.hasNext()) {
+			ConfigurationRole currentRole = it.next();
+			if(currentRole.getName().equals(roleName)) {
+				return currentRole;
+			}
+		}
+		return null;
 	}
 	
 }

@@ -4,14 +4,14 @@ import M2.exceptions.BindingException;
 
 public class Binding extends Link{
 
-	private ComponentPort componentPort1;
-	private ComponentPort componentPort2;
-	private ConnectorRole connectorRole1;
-	private ConnectorRole connectorRole2;
+	private ComponentPort componentPort;
+	private ConfigurationPort configurationPort;
+	private ConnectorRole connectorRole;
+	private ConfigurationRole configurationRole;
 	
 	
 	// Binding between configuration and component
-	public Binding(String name, ComponentPort componentPort, ComponentPort configurationPort) throws BindingException {
+	public Binding(String name, ComponentPort componentPort, ConfigurationPort configurationPort) throws BindingException {
 		super(name);
 		
 		if(!checkLevel(componentPort, configurationPort)) {
@@ -20,15 +20,15 @@ public class Binding extends Link{
 		
 		if((componentPort.isReqPort() && configurationPort.isReqPort()) ||
 				componentPort.isProvPort() && configurationPort.isProvPort()) {
-			this.componentPort1 = componentPort;
-			this.componentPort2 = configurationPort;
+			this.componentPort = componentPort;
+			this.configurationPort = configurationPort;
 		}
 		else {
 			throw new BindingException("Cannot create binding, please ensure that given ports are both provided or required");
 		}
 	}
 	
-	public Binding(String name, ConnectorRole connectorRole, ConnectorRole configurationRole) throws BindingException {
+	public Binding(String name, ConnectorRole connectorRole, ConfigurationRole configurationRole) throws BindingException {
 		super(name);
 		
 		if(!checkLevel(connectorRole, configurationRole)) {
@@ -37,28 +37,28 @@ public class Binding extends Link{
 		
 		if((connectorRole.isFromRole() && configurationRole.isFromRole()) ||
 				connectorRole.isToRole() && configurationRole.isToRole()) {
-			this.connectorRole1 = connectorRole;
-			this.connectorRole2 = configurationRole;
+			this.connectorRole = connectorRole;
+			this.configurationRole = configurationRole;
 		}
 		else {
 			throw new BindingException("Cannot create binding, please ensure that given roles are both from or to");
 		}
 	}
 	
-	public ComponentPort getComponentPort1() {
-		return this.componentPort1;
+	public ComponentPort getComponentPort() {
+		return this.componentPort;
 	}
 	
-	public ComponentPort getComponentPort2() {
-		return this.componentPort2;
+	public ConfigurationPort getConfigurationPort() {
+		return this.configurationPort;
 	}
 	
-	public ConnectorRole getConnectorRole1() {
-		return this.connectorRole1;
+	public ConnectorRole getConnectorRole() {
+		return this.connectorRole;
 	}
 	
-	public ConnectorRole getConnectorRole2() {
-		return this.connectorRole2;
+	public ConfigurationRole getConfigurationRole() {
+		return this.configurationRole;
 	}
 	
 	private boolean checkLevel(Interface i1, Interface i2) {
