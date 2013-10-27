@@ -23,10 +23,9 @@ public abstract class ComponentPort extends ComponentInterface {
 	
 	@Override
 	public boolean equals(Object object) {
-		System.out.println("pouet");
 		if(object instanceof ComponentPort) {
 			ComponentPort port = (ComponentPort)object;
-			return name.equals(name.equals(port.getName()));
+			return name.equals(port.getName());
 		}
 		return false;
 	}

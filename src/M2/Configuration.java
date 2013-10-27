@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import javax.naming.ConfigurationException;
+import M2.exceptions.ConfigurationException;
 
 /**
  * Base element of architecture description, defines ports and services or roles.
@@ -38,6 +38,7 @@ public class Configuration extends Element {
 	private ArrayList<Binding> bindings;
 	
 	private int configurationType;
+	protected Element parent;
 	private ArrayList<ComponentPort> reqPorts;
 	private ArrayList<ComponentPort> provPorts;
 	private ArrayList<ConnectorRole> fromRoles;
@@ -66,6 +67,10 @@ public class Configuration extends Element {
 		else {
 			throw new ConfigurationException("Invalid configuration type");
 		}
+	}
+	
+	public final void setParent(Element parent) {
+		this.parent = parent;
 	}
 
 	/**
@@ -193,84 +198,78 @@ public class Configuration extends Element {
 	}
 	
 	/**
-	 * Runtime function : process the flush of the ports required by the service.
-	 * @param componentService the service calling the runtime function.
-	 */
-	public final void flushReqPorts(ComponentService componentService) {
-		System.out.println("[HADL-RUNTIME] Configuration " + this.name + " flushing required ports for " + componentService.getName() + " service");
-		// TODO Process the flush (by iterating through the attachments and bindings).
-	}
-	
-	/**
 	 * Runtime function : process the flush of the ports used by the service.
 	 * @param componentService the service calling the runtime function.
 	 */
-	public final void flushProvPorts(ComponentService componentService) {
-		System.out.println("[HADL-RUNTIME] Configuration " + this.name + " flushing provided ports for " + componentService.getName() + " service");
-		// TODO Process the flush (by iterating through the attachments and bindings).
+	public final void flush(Interface elementInterface) throws ConfigurationException {
+		System.out.println("[HADL-RUNTIME] Configuration " + this.name + " flushing " + elementInterface.getName());
+		if(elementInterface instanceof ComponentService) {
+			throw new ConfigurationException("Cannot flush a service");
+		}
 		/*
 		 * Search in the attachment list if there is any attachment matching
-		 * the service asking for a flush.
+		 * the interface asking for a flush.
 		 */
 		Iterator<Attachment> it = attachments.iterator();
 		while(it.hasNext()) {
 			Attachment currentAttachment = it.next();
-			if(currentAttachment.getComponentPort().isProvPort() &&
-					currentAttachment.getComponentPort().getParent().equals(componentService.getParent())) {
-				System.out.println("[HADL-RUNTIME] Propagating provided port " + currentAttachment.getComponentPort().getName() + " value to from role " + currentAttachment.getConnectorRole().getName());
+			/*
+			 * The flush concerns a component port.
+			 */
+			if(currentAttachment.getComponentPort().equals(elementInterface)) {
+				System.out.println("[HADL-RUNTIME] Propagating port " + currentAttachment.getComponentPort().getName() + " value to role " + currentAttachment.getConnectorRole().getName());
 				currentAttachment.getConnectorRole().setValue(currentAttachment.getComponentPort().getValue());
-				System.out.println("[HADL-RUNTIME] Calling connector glue operation");
-				currentAttachment.getConnectorRole().getParent().getGlue().callGlue();
+				boolean binded = this.bind(currentAttachment.getConnectorRole());
+				if(!binded) {
+					System.out.println("[HADL-RUNTIME] Calling connector glue operation");
+					/*
+					 * Glue call will call recursively flush operation.
+					 */
+					currentAttachment.getConnectorRole().getParent().getGlue().callGlue();
+				}
 			}
-		}
-		/*
-		 * Search in the binding list if there is any binding matching 
-		 * one of the provided port of the service asking for a flush.
-		 */
-		Iterator<Binding> binding_it = bindings.iterator();
-		while(binding_it.hasNext()) {
-			Binding currentBinding = binding_it.next();
-			if(currentBinding.getComponentPort1().getParent().equals(componentService.getParent())) {
-				currentBinding.getComponentPort2().setValue(currentBinding.getComponentPort1().getValue());
-			}
-			if(currentBinding.getComponentPort2().getParent().equals(componentService.getParent())) {
-				currentBinding.getComponentPort1().setValue(currentBinding.getComponentPort2().getValue());
+			/*
+			 * The flush concerns a connector role.
+			 */
+			if(currentAttachment.getConnectorRole().equals(elementInterface)) {
+				System.out.println("[HADL-RUNTIME] Propagating role " + currentAttachment.getConnectorRole().getName() + " value to port " + currentAttachment.getComponentPort().getName());
+				currentAttachment.getComponentPort().setValue(currentAttachment.getConnectorRole().getValue());
+				/*
+				 * Bind the port if needed, but this has no more effects, there is
+				 * no glue to call.
+				 */
+				this.bind(currentAttachment.getComponentPort());
 			}
 		}
 	}
 	
-	/**
-	 * Runtime function : process the flush of the given role.
-	 * @param role the role calling the runtime function.
-	 */
-	public final void flushRole(ConnectorRole role) {
-		/*
-		 * Search in the attachment list if there is any attachment matching
-		 * the role asking for a flush.
-		 */
-		Iterator<Attachment> it = attachments.iterator();
+	public final boolean bind(Interface elementInterface) {
+		boolean result = false;
+		Iterator<Binding> it = bindings.iterator();
 		while(it.hasNext()) {
-			Attachment currentAttachment = it.next();
-			if(currentAttachment.getConnectorRole().isToRole() &&
-					currentAttachment.getConnectorRole().getParent().equals(role.getParent())) {
-				System.out.println("[HADL-RUNTIME] Propagating to role " + currentAttachment.getConnectorRole().getName() + " value to required port " + currentAttachment.getComponentPort().getName());
-				currentAttachment.getComponentPort().setValue(currentAttachment.getConnectorRole().getValue());
+			Binding currentBinding = it.next();
+			if(elementInterface.equals(currentBinding.getComponentPort1())) {
+				System.out.println("[HADL-RUNTIME] Binding port " + elementInterface.getName() + " to port " + currentBinding.getComponentPort2());
+				currentBinding.getComponentPort2().setValue(currentBinding.getComponentPort1().getValue());
+				result = true;
 			}
-		}
-		/*
-		 * Search in the binding list if there is any binding matching 
-		 * one of the provided port of the service asking for a flush.
-		 */
-		Iterator<Binding> binding_it = bindings.iterator();
-		while(binding_it.hasNext()) {
-			Binding currentBinding = binding_it.next();
-			if(currentBinding.getConnectorRole1().getParent().equals(role.getParent())) {
+			if(elementInterface.equals(currentBinding.getComponentPort2())) {
+				System.out.println("[HADL-RUNTIME] Binding port " + elementInterface.getName() + " to port " + currentBinding.getComponentPort1());
+				currentBinding.getComponentPort1().setValue(currentBinding.getComponentPort2().getValue());
+				result = true;
+			}
+			if(elementInterface.equals(currentBinding.getConnectorRole1())) {
+				System.out.println("[HADL-RUNTIME] Binding role " + elementInterface.getName() + " to role " + currentBinding.getConnectorRole2());
 				currentBinding.getConnectorRole2().setValue(currentBinding.getConnectorRole1().getValue());
+				result = true;
 			}
-			if(currentBinding.getConnectorRole2().getParent().equals(role.getParent())) {
+			if(elementInterface.equals(currentBinding.getConnectorRole2())) {
+				System.out.println("[HADL-RUNTIME] Binding role " + elementInterface.getName() + " to role " + currentBinding.getConnectorRole1());
 				currentBinding.getConnectorRole1().setValue(currentBinding.getConnectorRole2().getValue());
+				result = true;
 			}
 		}
+		return result;
 	}
 	
 	private boolean representComponent() {

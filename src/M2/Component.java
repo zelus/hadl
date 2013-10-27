@@ -97,6 +97,7 @@ public abstract class Component extends Element {
 	 * @param config the configuration.
 	 */
 	public final void setSubConfig(Configuration config) {
+		subConfig.setLevel(level+1);
 		subConfig = config;
 	}
 	

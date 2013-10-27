@@ -86,6 +86,7 @@ public class Connector extends Element {
 		if(connectorGlue != null) {
 			throw new ConnectorException("Cannot add subConfig to the connector : the connector already has a glue");
 		}
+		subConfig.setLevel(level+1);
 		subConfig = config;
 	}
 	

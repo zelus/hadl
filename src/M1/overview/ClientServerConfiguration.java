@@ -6,7 +6,7 @@ import M2.Configuration;
 public class ClientServerConfiguration extends Configuration {
 
 	public ClientServerConfiguration() throws Exception {
-		super("ClientServerConfiguration", 0);
+		super("ClientServerConfiguration", 0, ClientServerConfiguration.COMPONENT_TYPE);
 		ClientComponent clientComponent = new ClientComponent(this);
 		this.addComponent(clientComponent);
 		ServerComponent serverComponent = new ServerComponent(this);

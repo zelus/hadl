@@ -1,5 +1,7 @@
 package M2;
 
+import M2.exceptions.ConfigurationException;
+
 /**
  * Defines a connector role.
  * <p>
@@ -18,6 +20,15 @@ public abstract class ConnectorRole extends ConnectorInterface {
 	 */
 	public ConnectorRole(String name, Connector parent) {
 		super(name,parent);
+	}
+	
+	@Override
+	public boolean equals(Object object) {
+		if(object instanceof ConnectorRole) {
+			ConnectorRole role = (ConnectorRole)object;
+			return name.equals(role.getName());
+		}
+		return false;
 	}
 	
 	/**
@@ -48,8 +59,8 @@ public abstract class ConnectorRole extends ConnectorInterface {
 	 * The flush ensure that setValue() method forwards has been executed.
 	 * </p>
 	 */
-	public final void flush() {
-		this.parent.getParentConfig().flushRole(this);
+	public final void flush() throws ConfigurationException {
+		this.parent.getParentConfig().flush(this);
 	}
 	
 	/**

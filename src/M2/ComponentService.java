@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import M2.exceptions.ComponentServiceException;
+import M2.exceptions.ConfigurationException;
 
 /**
  * Defines a component service.
@@ -73,20 +74,19 @@ public abstract class ComponentService extends ComponentInterface {
 	 * </p>
 	 * @return the object returned by the run() method.
 	 */
-	public final Object call() {
+	public final Object call() throws ConfigurationException {
 		/*
 		 * Tell to the configuration that a ComponentService is going to be
 		 * launch and it needs reqPorts values. The runtime will compute the request
 		 * and ensure that values are correctly set.
 		 */
 		System.out.println("[HADL-RUNTIME] Starting " + this.name + " service ...");
-		flushReqPorts();
 		Object runResult = run();
 		/*
 		 * Tell to the configuration that the service ended and the provPorts need to
 		 * be flush to update other component's required ports.
 		 */
-		flushProvPorts();
+		flush();
 		System.out.println("[HADL-RUNTIME] " + this.name + " service finish without error");
 		return runResult;
 	}
@@ -96,18 +96,11 @@ public abstract class ComponentService extends ComponentInterface {
 	 * 
 	 * The flush ensure that getValue() method backward has been executed.
 	 */
-	public final void flushReqPorts() {
-		this.getParent().getParentConfig().flushReqPorts(this);
-	}
-	
-	/**
-	 * Ask the runtime to flush all the provided ports associated to the current service.
-	 * 
-	 * The flush ensure that all the setValue() method forwards has been executed.
-	 */
-	public final void flushProvPorts() {
-		this.getParent().getParentConfig().flushProvPorts(this);
-		
+	public final void flush() throws ConfigurationException {
+		Iterator<ComponentPort> it = provPorts.iterator();
+		while(it.hasNext()) {
+			this.getParent().getParentConfig().flush(it.next());
+		}
 	}
 	
 	/**

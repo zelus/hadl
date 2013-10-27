@@ -1,5 +1,6 @@
 package M2;
 
+import M2.exceptions.ConfigurationException;
 import M2.exceptions.GlueException;
 
 /**
@@ -53,7 +54,7 @@ public class ConnectorGlue {
 	 * Call the user-defined method runGlue() and define the basic flush policy.
 	 * </p>
 	 */
-	public final void callGlue() {
+	public final void callGlue() throws ConfigurationException {
 		System.out.println("[HADL-RUNTIME] Starting glue ...");
 		this.runGlue();
 		this.toRole.flush();
