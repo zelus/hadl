@@ -61,6 +61,13 @@ public class Configuration extends Element {
 			fromRoles = new ArrayList<ConfigurationRole>();
 			toRoles = new ArrayList<ConfigurationRole>();
 		}
+		else if(parent == null) {
+			/*
+			 * Top level Configuration, doesn't provides any port, services and
+			 * roles. If such a behavior is needed put this in appropriate 
+			 * Element.
+			 */
+		}
 		else {
 			throw new ConfigurationException("Invalid configuration type");
 		}
