@@ -7,7 +7,7 @@ import M2.Configuration;
 public class ServerDetailsConfiguration extends Configuration {
 
 	public ServerDetailsConfiguration(Component parent) throws Exception {
-		super("ServerDetailsConfiguration", 1, parent);
+		super("ServerDetailsConfiguration", parent);
 		ServerDetailsReceivePort sdReceivePort = new ServerDetailsReceivePort(this);
 		this.addReqPort(sdReceivePort);
 		this.addBinding(new Binding("ReceiveRequestToReceive",parent.getReqPort("ServerReceiveRequestPort"),sdReceivePort));
