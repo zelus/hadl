@@ -29,15 +29,11 @@ import M2.exceptions.ConfigurationException;
  */
 public class Configuration extends Element {
 	
-	public static int COMPONENT_TYPE = 1;
-	public static int CONNECTOR_TYPE = 2;
-	
 	private ArrayList<Component> components;
 	private ArrayList<Connector> connectors;
 	private ArrayList<Attachment> attachments;
 	private ArrayList<Binding> bindings;
 	
-	private int configurationType;
 	protected Element parent;
 	private ArrayList<ConfigurationPort> reqPorts;
 	private ArrayList<ConfigurationPort> provPorts;
@@ -48,19 +44,20 @@ public class Configuration extends Element {
 	 * Create a configuration with the given name and architectural level.
 	 * @param name the name of the configuration.
 	 * @param level the architectural level of the configuration.
+	 * @param parent the parent of the configuration.
 	 */
-	public Configuration(String name, int level, int configurationType) throws ConfigurationException {
+	public Configuration(String name, int level, Element parent) throws ConfigurationException {
 		super(name,level);
 		components = new ArrayList<Component>();
 		connectors = new ArrayList<Connector>();
 		attachments = new ArrayList<Attachment>();
 		bindings = new ArrayList<Binding>();
-		this.configurationType = configurationType;
-		if(configurationType == COMPONENT_TYPE) {
+		this.parent = parent;
+		if(parent instanceof Component) {
 			provPorts = new ArrayList<ConfigurationPort>();
 			reqPorts = new ArrayList<ConfigurationPort>();
 		}
-		else if(configurationType == CONNECTOR_TYPE) {
+		else if(parent instanceof Connector) {
 			fromRoles = new ArrayList<ConfigurationRole>();
 			toRoles = new ArrayList<ConfigurationRole>();
 		}
@@ -319,11 +316,11 @@ public class Configuration extends Element {
 	}
 	
 	private boolean representComponent() {
-		return(configurationType == COMPONENT_TYPE);
+		return(parent instanceof Component);
 	}
 	
 	private boolean representConnector() {
-		return(configurationType == CONNECTOR_TYPE);
+		return(parent instanceof Connector);
 	}
 	
 	private ConfigurationPort getPort(String portName, Collection<ConfigurationPort> portCollection) {
