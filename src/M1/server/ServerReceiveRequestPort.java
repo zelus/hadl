@@ -1,4 +1,4 @@
-package M1.overview;
+package M1.server;
 
 import M2.Component;
 import M2.ComponentPort;

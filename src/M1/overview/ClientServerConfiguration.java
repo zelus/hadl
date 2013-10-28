@@ -1,5 +1,8 @@
 package M1.overview;
 
+import M1.client.ClientComponent;
+import M1.rpc.RpcConnector;
+import M1.server.ServerComponent;
 import M2.Attachment;
 import M2.Configuration;
 

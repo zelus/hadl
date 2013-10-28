@@ -1,4 +1,4 @@
-package M1.overview;
+package M1.client;
 
 import M2.Component;
 import M2.ComponentPort;

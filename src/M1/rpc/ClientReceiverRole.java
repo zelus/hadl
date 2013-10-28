@@ -1,4 +1,4 @@
-package M1.overview;
+package M1.rpc;
 
 import M2.Connector;
 import M2.ConnectorRole;
