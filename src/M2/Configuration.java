@@ -46,8 +46,8 @@ public class Configuration extends Element {
 	 * @param level the architectural level of the configuration.
 	 * @param parent the parent of the configuration.
 	 */
-	public Configuration(String name, int level, Element parent) throws ConfigurationException {
-		super(name,level);
+	public Configuration(String name, Element parent) throws ConfigurationException {
+		super(name,parent);
 		components = new ArrayList<Component>();
 		connectors = new ArrayList<Connector>();
 		attachments = new ArrayList<Attachment>();

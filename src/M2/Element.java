@@ -34,6 +34,10 @@ public class Element {
 		properties = new ArrayList<Property>();
 	}
 	
+	public Element(String name, Element parent) {
+		this(name,parent.level+1);
+	}
+	
 	/**
 	 * Add a constraint to the element constraints.
 	 * @param constraint the constraint to add.
