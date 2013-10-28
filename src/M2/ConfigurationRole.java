@@ -1,5 +1,7 @@
 package M2;
 
+import M2.exceptions.ConfigurationException;
+
 public abstract class ConfigurationRole extends ConfigurationInterface {
 
 	public ConfigurationRole(String name, Configuration parent) {
@@ -16,15 +18,23 @@ public abstract class ConfigurationRole extends ConfigurationInterface {
 	}
 	
 	public final boolean isFromRole() {
-		if(parent.getFromRole(name) != null) {
-			return true;
+		try {
+			if(parent.getFromRole(name) != null) {
+				return true;
+			}
+		}catch(ConfigurationException e) {
+			
 		}
 		return false;
 	}
 
 	public final boolean isToRole() {
-		if(parent.getToRole(name) != null) {
-			return true;
+		try {
+			if(parent.getToRole(name) != null) {
+				return true;
+			}
+		}catch(ConfigurationException e) {
+			
 		}
 		return false;
 	}

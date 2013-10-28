@@ -1,7 +1,6 @@
 import M1.client.ClientComponent;
 import M1.client.ClientUserInputPort;
 import M1.client.SendMessageService;
-import M1.client.SendRequestPort;
 import M1.overview.ClientServerConfiguration;
 import M1.server.ServerComponent;
 

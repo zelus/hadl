@@ -15,6 +15,7 @@ public class ReadSocketPort extends ComponentPort {
 	@Override
 	public void setValue(Object object) {
 		this.socketBuffer = (String)object;
+		System.out.println("\t[M1 ReadSocketPort updated with value \"" + socketBuffer + "\"");
 	}
 
 	@Override

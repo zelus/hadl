@@ -1,5 +1,7 @@
 package M2;
 
+import M2.exceptions.ConfigurationException;
+
 public abstract class ConfigurationPort extends ConfigurationInterface {
 
 	public ConfigurationPort(String name, Configuration parent) {
@@ -16,15 +18,23 @@ public abstract class ConfigurationPort extends ConfigurationInterface {
 	}
 	
 	public final boolean isProvPort() {
-		if(parent.getProvPort(name) != null) {
-			return true;
+		try {
+			if(parent.getProvPort(name) != null) {
+				return true;
+			}
+		}catch(ConfigurationException e) {
+			
 		}
 		return false;
 	}
 	
 	public final boolean isReqPort() {
-		if(parent.getReqPort(name) != null) {
-			return true;
+		try {
+			if(parent.getReqPort(name) != null) {
+				return true;
+			}
+		}catch(ConfigurationException e) {
+			
 		}
 		return false;
 	}
