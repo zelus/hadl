@@ -35,7 +35,13 @@ public class Element {
 	}
 	
 	public Element(String name, Element parent) {
-		this(name,parent.level+1);
+		this.name = name;
+		if(parent == null) {
+			this.level = 0;
+		}
+		else {
+			this.level = parent.level + 1;
+		}
 	}
 	
 	/**
