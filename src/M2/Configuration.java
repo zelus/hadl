@@ -263,7 +263,7 @@ public class Configuration extends Element {
 			if(currentAttachment.getComponentPort().equals(elementInterface)) {
 				System.out.println("[HADL-RUNTIME] Propagating port " + currentAttachment.getComponentPort().getName() + " value to role " + currentAttachment.getConnectorRole().getName());
 				currentAttachment.getConnectorRole().setValue(currentAttachment.getComponentPort().getValue());
-				boolean upBinded = this.bind(currentAttachment.getConnectorRole(),this);
+				this.bind(currentAttachment.getConnectorRole(),this);
 				boolean downBinded = this.bind(currentAttachment.getConnectorRole(), currentAttachment.getConnectorRole().getParent().getSubConfig());
 				if(!downBinded) {
 					System.out.println("[HADL-RUNTIME] Calling connector glue operation");
@@ -283,7 +283,6 @@ public class Configuration extends Element {
 				 * Bind the port if needed, but this has no more effects, there is
 				 * no glue to call.
 				 */
-				// first upbinded, then down binded
 				this.bind(currentAttachment.getComponentPort(),this);
 				this.bind(currentAttachment.getComponentPort(), currentAttachment.getComponentPort().getParent().getSubConfig());
 			}
