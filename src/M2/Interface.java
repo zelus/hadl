@@ -32,5 +32,14 @@ public abstract class Interface {
 	 * @return the parent element of the interface.
 	 */
 	public abstract Element getParent();
+	
+	@Override
+	public boolean equals(Object object) {
+		if(object instanceof Interface) {
+			Interface i = (Interface)object;
+			return(name.equals(i.name) && this.getParent().getLevel() == i.getParent().getLevel());
+		}
+		return false;
+	}
 
 }

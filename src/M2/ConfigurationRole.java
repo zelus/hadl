@@ -7,15 +7,6 @@ public abstract class ConfigurationRole extends ConfigurationInterface {
 	public ConfigurationRole(String name, Configuration parent) {
 		super(name, parent);
 	}
-
-	@Override
-	public boolean equals(Object object) {
-		if(object instanceof ConfigurationRole) {
-			ConfigurationRole role = (ConfigurationRole)object;
-			return name.equals(role.name);
-		}
-		return false;
-	}
 	
 	public final boolean isFromRole() {
 		try {

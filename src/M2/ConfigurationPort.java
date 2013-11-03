@@ -8,15 +8,6 @@ public abstract class ConfigurationPort extends ConfigurationInterface {
 		super(name, parent);
 	}
 	
-	@Override
-	public boolean equals(Object object) {
-		if(object instanceof ConfigurationPort) {
-			ConfigurationPort port = (ConfigurationPort)object;
-			return name.equals(port.name);
-		}
-		return false;
-	}
-	
 	public final boolean isProvPort() {
 		try {
 			if(parent.getProvPort(name) != null) {

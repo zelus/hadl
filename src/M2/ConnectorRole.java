@@ -22,15 +22,6 @@ public abstract class ConnectorRole extends ConnectorInterface {
 		super(name,parent);
 	}
 	
-	@Override
-	public boolean equals(Object object) {
-		if(object instanceof ConnectorRole) {
-			ConnectorRole role = (ConnectorRole)object;
-			return name.equals(role.getName());
-		}
-		return false;
-	}
-	
 	/**
 	 * @return true if the role is registered as a from role to its connector,
 	 * false otherwise.

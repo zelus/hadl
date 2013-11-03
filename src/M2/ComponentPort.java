@@ -21,15 +21,6 @@ public abstract class ComponentPort extends ComponentInterface {
 		super(name,parent);
 	}
 	
-	@Override
-	public boolean equals(Object object) {
-		if(object instanceof ComponentPort) {
-			ComponentPort port = (ComponentPort)object;
-			return name.equals(port.getName());
-		}
-		return false;
-	}
-	
 	/**
 	 * @return true if the port is registered as a provided port to its component,
 	 * false otherwise.

@@ -40,7 +40,7 @@ public class Connector extends Element {
 	private ConnectorGlue connectorGlue;
 	
 	/**
-	 * Create a new connector with the given name, level and parent.
+	 * Create a new connector with the given name and parent.
 	 * @param name the name of the connector.
 	 * @param parentConfig the configuration handling the connector.
 	 */

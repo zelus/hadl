@@ -22,5 +22,4 @@ public class ComponentInterface extends Interface {
 	public Component getParent() {
 		return parent;
 	}
-
 }
