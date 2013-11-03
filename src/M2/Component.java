@@ -44,7 +44,7 @@ public abstract class Component extends Element {
 	 * @param parentConfig the configuration handling the component.
 	 */
 	public Component(String name, Configuration parentConfig) {
-		super(name,parentConfig.getLevel()+1);
+		super(name,parentConfig);
 		
 		this.provPorts 		= new ArrayList<ComponentPort>();
 		this.reqPorts 		= new ArrayList<ComponentPort>();

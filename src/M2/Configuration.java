@@ -43,7 +43,6 @@ public class Configuration extends Element {
 	/**
 	 * Create a configuration with the given name and architectural level.
 	 * @param name the name of the configuration.
-	 * @param level the architectural level of the configuration.
 	 * @param parent the parent of the configuration.
 	 */
 	public Configuration(String name, Element parent) throws ConfigurationException {

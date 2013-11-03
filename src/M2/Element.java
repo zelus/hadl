@@ -23,17 +23,10 @@ public class Element {
 	private ArrayList<Property> properties;
 	
 	/**
-	 * Create an element with the given name and the given architectural level.
+	 * Create an element with the given name and the parent.
 	 * @param name the name of the element.
-	 * @param level the architectural level of the element.
+	 * @param parent the parent of the element.
 	 */
-	public Element(String name, int level) {
-		this.name = name;
-		this.level = level;
-		constraints = new ArrayList<Constraint>();
-		properties = new ArrayList<Property>();
-	}
-	
 	public Element(String name, Element parent) {
 		this.name = name;
 		if(parent == null) {
@@ -42,6 +35,8 @@ public class Element {
 		else {
 			this.level = parent.level + 1;
 		}
+		this.constraints = new ArrayList<Constraint>();
+		this.properties = new ArrayList<Property>();
 	}
 	
 	/**
