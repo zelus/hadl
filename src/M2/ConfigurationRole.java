@@ -54,7 +54,7 @@ public abstract class ConfigurationRole extends ConfigurationInterface {
 	
 	/**
 	 * Set the value associated to the current role.
-	 * @param obj the new value to set.
+	 * @param object the new value to set.
 	 */
 	public abstract void setValue(Object object);
 
