@@ -92,8 +92,13 @@ public class Configuration extends Element {
 	 * @param component the component to add.
 	 */
 	public final void addComponent(Component component) {
-		component.setLevel(this.getLevel()+1);
-		components.add(component);
+		if(!this.components.contains(component)) {
+			/*
+			 * Avoid multiple additions
+			 */
+			component.setLevel(this.getLevel()+1);
+			components.add(component);
+		}
 	}
 	
 	/**
@@ -105,8 +110,10 @@ public class Configuration extends Element {
 	 * @param connector
 	 */
 	public final void addConnector(Connector connector) {
-		connector.setLevel(this.getLevel() + 1);
-		connectors.add(connector);
+		if(!this.connectors.contains(connector)) {
+			connector.setLevel(this.getLevel() + 1);
+			connectors.add(connector);
+		}
 	}
 	
 	/**

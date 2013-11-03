@@ -9,7 +9,7 @@ public class ServerDetailsConfiguration extends Configuration {
 	public ServerDetailsConfiguration(Component parent) throws Exception {
 		super("ServerDetailsConfiguration", parent);
 		ConnectionManager connectionManager = new ConnectionManager(this);
-		/*this.addComponent(connectionManager);*/
+		//this.addComponent(connectionManager);
 		ServerDetailsReceivePort sdReceivePort = new ServerDetailsReceivePort(this);
 		this.addReqPort(sdReceivePort);
 		this.addBinding(new Binding("ReceiveRequestToReceive",parent.getReqPort("ServerReceiveRequestPort"),sdReceivePort));
