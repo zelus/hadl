@@ -53,7 +53,7 @@ public class Attachment extends Link{
 	 * Convenience constructor : create an attachment between the given connector
 	 * and the given component.
 	 * <p>
-	 * In HADL, attachment are not explicitly oriented, but to create an understandable
+	 * In HADL, attachments are not explicitly oriented, but to create an understandable
 	 * client code it may be useful to call this constructor.
 	 * </p>
 	 * @param name the name of the attachment.

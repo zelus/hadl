@@ -6,7 +6,7 @@ import M2.Configuration;
 public class ServerComponent extends Component {
 
 	public ServerComponent(Configuration parent) throws Exception {
-		super("Server", 0, parent);
+		super("Server", parent);
 		
 		ServerReceiveRequestPort serverReceiveRequestPort = new ServerReceiveRequestPort(this);
 		this.addReqPort(serverReceiveRequestPort);

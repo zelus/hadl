@@ -7,7 +7,7 @@ import M2.ConnectorGlue;
 public class RpcConnector extends Connector {
 
 	public RpcConnector(Configuration parent) throws Exception {
-		super("RPC", 0, parent);
+		super("RPC", parent);
 		
 		ClientSenderRole clientSenderRole = new ClientSenderRole(this);
 		this.addFromRole(clientSenderRole);

@@ -42,11 +42,10 @@ public class Connector extends Element {
 	/**
 	 * Create a new connector with the given name, level and parent.
 	 * @param name the name of the connector.
-	 * @param level the architectural level of the connector.
 	 * @param parentConfig the configuration handling the connector.
 	 */
-	public Connector(String name, int level, Configuration parentConfig) {
-		super(name,level);
+	public Connector(String name, Configuration parentConfig) {
+		super(name,parentConfig.getLevel()+1);
 		
 		this.fromRoles = new ArrayList<ConnectorRole>();
 		this.toRoles = new ArrayList<ConnectorRole>();

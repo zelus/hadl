@@ -8,7 +8,7 @@ import M2.exceptions.ComponentServiceException;
 public class ClientComponent extends Component {
 
 	public ClientComponent(Configuration parent) throws ComponentServiceException {
-		super("Client", 0, parent);
+		super("Client", parent);
 		
 		SendRequestPort sendRequestPort = new SendRequestPort(this);
 		this.addProvPort(sendRequestPort);

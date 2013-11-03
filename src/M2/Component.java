@@ -41,11 +41,10 @@ public abstract class Component extends Element {
 	/**
 	 * Create a new component with the given name.
 	 * @param name the name of the component.
-	 * @param level the architectural level of the component.
 	 * @param parentConfig the configuration handling the component.
 	 */
-	public Component(String name, int level, Configuration parentConfig) {
-		super(name,level);
+	public Component(String name, Configuration parentConfig) {
+		super(name,parentConfig.getLevel()+1);
 		
 		this.provPorts 		= new ArrayList<ComponentPort>();
 		this.reqPorts 		= new ArrayList<ComponentPort>();
