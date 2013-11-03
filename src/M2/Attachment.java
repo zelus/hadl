@@ -7,7 +7,7 @@ import M2.exceptions.AttachmentException;
  * configuration and at the same hierarchical level.
  * <p>
  * In HADL attachments are not oriented, the runtime deduces the direction
- * when flush operation are called.
+ * when flush operations are called.
  * </p>
  * @author CaterpillarTeam
  */
