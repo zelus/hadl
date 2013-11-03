@@ -51,6 +51,7 @@ public class Connector extends Element {
 		this.toRoles = new ArrayList<ConnectorRole>();
 		
 		this.parentConfig = parentConfig;
+		parentConfig.addConnector(this);
 		subConfig = null;
 		connectorGlue = null;
 	}

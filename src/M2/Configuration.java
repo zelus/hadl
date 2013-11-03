@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import M2.exceptions.ConfigurationException;
+import M2.exceptions.ConnectorException;
 
 /**
  * Base element of architecture description, defines ports and services or roles.
@@ -55,10 +56,16 @@ public class Configuration extends Element {
 		if(parent instanceof Component) {
 			provPorts = new ArrayList<ConfigurationPort>();
 			reqPorts = new ArrayList<ConfigurationPort>();
+			((Component) parent).setSubConfig(this);
 		}
 		else if(parent instanceof Connector) {
 			fromRoles = new ArrayList<ConfigurationRole>();
 			toRoles = new ArrayList<ConfigurationRole>();
+			try {
+				((Connector) parent).setSubConfig(this);
+			}catch(ConnectorException e) {
+				System.out.println("Error in configuration creation : " + e.getMessage());
+			}
 		}
 		else if(parent == null) {
 			/*

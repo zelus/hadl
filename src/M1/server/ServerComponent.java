@@ -11,7 +11,8 @@ public class ServerComponent extends Component {
 		ServerReceiveRequestPort serverReceiveRequestPort = new ServerReceiveRequestPort(this);
 		this.addReqPort(serverReceiveRequestPort);
 		
-		this.setSubConfig(new ServerDetailsConfiguration(this));
+		//this.setSubConfig(new ServerDetailsConfiguration(this));
+		new ServerDetailsConfiguration(this);
 	}
 
 }

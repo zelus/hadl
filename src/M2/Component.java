@@ -52,6 +52,7 @@ public abstract class Component extends Element {
 		this.reqServices 	= new ArrayList<ComponentService>();
 		
 		this.parentConfig = parentConfig;
+		parentConfig.addComponent(this);
 		subConfig = null;
 	}
 	
