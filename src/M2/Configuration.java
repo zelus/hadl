@@ -78,10 +78,6 @@ public class Configuration extends Element {
 			throw new ConfigurationException("Invalid configuration type");
 		}
 	}
-	
-	public final void setParent(Element parent) {
-		this.parent = parent;
-	}
 
 	/**
 	 * Add the given component to the sub-component list.
@@ -132,6 +128,12 @@ public class Configuration extends Element {
 		bindings.add(binding);
 	}
 	
+	/**
+	 * Add the given port to the provided ports.
+	 * @param i the port to add.
+	 * @throws ConfigurationException if the configuration is not the
+	 * sub-configuration of a component.
+	 */
 	public final void addProvPort(ConfigurationPort i) throws ConfigurationException {
 		if(representComponent()) {
 			provPorts.add(i);
@@ -141,6 +143,12 @@ public class Configuration extends Element {
 		}
 	}
 	
+	/**
+	 * Add the given port to the required ports.
+	 * @param i the port to add.
+	 * @throws ConfigurationException if the configuration is not the 
+	 * sub-configuration of a component.
+	 */
 	public final void addReqPort(ConfigurationPort i) throws ConfigurationException {
 		if(representComponent()) {
 			reqPorts.add(i);
@@ -150,6 +158,12 @@ public class Configuration extends Element {
 		}
 	}
 	
+	/**
+	 * Add the given role to the from roles.
+	 * @param i the role to add.
+	 * @throws ConfigurationException if the configuration is not the
+	 * sub-configuration of a connector.
+	 */
 	public final void addFromRole(ConfigurationRole i) throws ConfigurationException {
 		if(representConnector()) {
 			fromRoles.add(i);
@@ -159,6 +173,12 @@ public class Configuration extends Element {
 		}
 	}
 	
+	/**
+	 * Add the given role to the to roles.
+	 * @param i the role to add.
+	 * @throws ConfigurationException if the configuration is not the 
+	 * sub-configuration of a connector.
+	 */
 	public final void addToRole(ConfigurationRole i) throws ConfigurationException {
 		if(representConnector()) {
 			toRoles.add(i);
