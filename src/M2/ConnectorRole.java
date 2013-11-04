@@ -54,6 +54,14 @@ public abstract class ConnectorRole extends ConnectorInterface {
 		this.parent.getParentConfig().flush(this);
 	}
 	
+	public final void updateFrom(ComponentPort componentPort) {
+		setValue(componentPort.getValue());
+	}
+	
+	public final void updateFrom(ConfigurationRole configurationRole) {
+		setValue(configurationRole.getValue());
+	}
+	
 	/**
 	 * Set the value associated to the current role.
 	 * @param obj the new value to set.

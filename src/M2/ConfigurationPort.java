@@ -53,6 +53,10 @@ public abstract class ConfigurationPort extends ConfigurationInterface {
 		return false;
 	}
 	
+	public final void updateFrom(ComponentPort componentPort) {
+		setValue(componentPort.getValue());
+	}
+
 	/**
 	 * Set the value associated to the current port.
 	 * @param object the new value to set.

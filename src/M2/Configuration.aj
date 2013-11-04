@@ -30,6 +30,29 @@ import M2.exceptions.ConnectorException;
  */
 public class Configuration extends Element {
 	
+	public pointcut bindDelegation(Configuration configuration, Interface iface) :
+		call(* flushRec(..)) &&
+		withincode(* Configuration.bind(..)) &&
+		this(configuration) && 
+		args(iface,..);
+	
+	public pointcut flushPropagate(Configuration configuration, Interface in, Interface out) :
+		call( * updateFrom(..)) &&
+		withincode(* Configuration.flushRec(..)) &&
+		target(out) &&
+		args(in) && 
+		this(configuration);
+	
+	public pointcut bindPropagate(Configuration configuration, Interface in, Interface out) :
+		call( * updateFrom(..)) &&
+		withincode(* Configuration.bind(..)) &&
+		target(out) &&
+		args(in) && 
+		this(configuration);
+	
+	public pointcut flush(Configuration configuration, Interface iface) : 
+		call(* flushRec(..)) && this(configuration) && args(iface,..);
+	
 	private ArrayList<Component> components;
 	private ArrayList<Connector> connectors;
 	private ArrayList<Attachment> attachments;
@@ -368,7 +391,6 @@ public class Configuration extends Element {
 		if(flushedInterfaces.contains(elementInterface)) {
 			return;
 		}
-		System.out.println("[HADL-RUNTIME] Configuration " + this.name + " flushing " + elementInterface.getName());
 		flushedInterfaces.add(elementInterface);
 		/*
 		 * First run the local bindings
@@ -385,13 +407,11 @@ public class Configuration extends Element {
 			 * The flush concerns a component port.
 			 */
 			if(currentAttachment.getComponentPort().equals(elementInterface)) {
-				System.out.println("[HADL-RUNTIME] Propagating port " + currentAttachment.getComponentPort().getName() + " value to role " + currentAttachment.getConnectorRole().getName());
-				currentAttachment.getConnectorRole().setValue(currentAttachment.getComponentPort().getValue());
+				currentAttachment.getConnectorRole().updateFrom(currentAttachment.getComponentPort());
 				if(currentAttachment.getConnectorRole().getParent().getSubConfig() != null) {
 					currentAttachment.getConnectorRole().getParent().getSubConfig().flushRec(currentAttachment.getConnectorRole(), flushedInterfaces);
 				}
 				else {
-					System.out.println("[HADL-RUNTIME] Calling connector glue operation");
 					/*
 					 * Glue call will call recursively flush operation.
 					 */
@@ -402,8 +422,7 @@ public class Configuration extends Element {
 			 * The flush concerns a connector role.
 			 */
 			if(currentAttachment.getConnectorRole().equals(elementInterface)) {
-				System.out.println("[HADL-RUNTIME] Propagating role " + currentAttachment.getConnectorRole().getName() + " value to port " + currentAttachment.getComponentPort().getName());
-				currentAttachment.getComponentPort().setValue(currentAttachment.getConnectorRole().getValue());
+				currentAttachment.getComponentPort().updateFrom(currentAttachment.getConnectorRole());
 				if(currentAttachment.getComponentPort().getParent().getSubConfig() != null) {
 					currentAttachment.getComponentPort().getParent().getSubConfig().flushRec(currentAttachment.getComponentPort(), flushedInterfaces);
 				}
@@ -436,29 +455,25 @@ public class Configuration extends Element {
 			Binding currentBinding = it.next();
 			if(elementInterface.equals(currentBinding.getComponentPort())) {
 				if(!flushedInterface.contains(currentBinding.getConfigurationPort())) {
-					System.out.println("[HADL-RUNTIME] Binding port " + elementInterface.getName() + " to port " + currentBinding.getConfigurationPort().getName());
-					currentBinding.getConfigurationPort().setValue(currentBinding.getComponentPort().getValue());
+					currentBinding.getConfigurationPort().updateFrom(currentBinding.getComponentPort());
 					bindedInterfaces.add(currentBinding.getConfigurationPort());
 				}
 			}
 			if(elementInterface.equals(currentBinding.getConfigurationPort())) {
 				if(!flushedInterface.contains(currentBinding.getComponentPort())) {
-					System.out.println("[HADL-RUNTIME] Binding port " + elementInterface.getName() + " to port " + currentBinding.getComponentPort().getName());
-					currentBinding.getComponentPort().setValue(currentBinding.getConfigurationPort().getValue());
+					currentBinding.getComponentPort().updateFrom(currentBinding.getConfigurationPort());
 					bindedInterfaces.add(currentBinding.getComponentPort());
 				}
 			}
 			if(elementInterface.equals(currentBinding.getConnectorRole())) {
 				if(!flushedInterface.contains(currentBinding.getConfigurationRole())) {
-					System.out.println("[HADL-RUNTIME] Binding role " + elementInterface.getName() + " to role " + currentBinding.getConfigurationRole().getName());
-					currentBinding.getConfigurationRole().setValue(currentBinding.getConnectorRole().getValue());
+					currentBinding.getConfigurationRole().updateFrom(currentBinding.getConnectorRole());
 					bindedInterfaces.add(currentBinding.getConfigurationRole());
 				}
 			}
 			if(elementInterface.equals(currentBinding.getConfigurationRole())) {
 				if(!flushedInterface.contains(currentBinding.getConnectorRole())) {
-					System.out.println("[HADL-RUNTIME] Binding role " + elementInterface.getName() + " to role " + currentBinding.getConnectorRole().getName());
-					currentBinding.getConnectorRole().setValue(currentBinding.getConfigurationRole().getValue());
+					currentBinding.getConnectorRole().updateFrom(currentBinding.getConfigurationRole());
 					bindedInterfaces.add(currentBinding.getConnectorRole());
 				}
 			}
@@ -477,17 +492,17 @@ public class Configuration extends Element {
 			Interface currentInterface = binded_it.next();
 			try {
 				if(currentInterface.getParent() instanceof Configuration) {
-					System.out.println("[HADL-RUNTIME] Delegating " + currentInterface.getName() + " flush to Configuration " + ((Configuration)currentInterface.getParent()).getName());
+				//	System.out.println("[HADL-RUNTIME] Delegating " + currentInterface.getName() + " flush to Configuration " + ((Configuration)currentInterface.getParent()).getName());
 					((Configuration)currentInterface.getParent()).flushRec(currentInterface,flushedInterface);
 				}
 				else if(currentInterface.getParent() instanceof Component) {
 					Component bindedInterfaceParent = (Component)currentInterface.getParent();
-					System.out.println("[HADL-RUNTIME] Delegating " + currentInterface.getName() + " flush to Configuration " + bindedInterfaceParent.getParentConfig().getName());
+				//	System.out.println("[HADL-RUNTIME] Delegating " + currentInterface.getName() + " flush to Configuration " + bindedInterfaceParent.getParentConfig().getName());
 					bindedInterfaceParent.getParentConfig().flushRec(currentInterface,flushedInterface);	
 				}
 				else if(currentInterface.getParent() instanceof Connector) {
 					Connector bindedInterfaceParent = (Connector)currentInterface.getParent();
-					System.out.println("[HADL-RUNTIME] Delegating " + currentInterface.getName() + "flush to Configuration " + bindedInterfaceParent.getParentConfig().getName());
+				//	System.out.println("[HADL-RUNTIME] Delegating " + currentInterface.getName() + "flush to Configuration " + bindedInterfaceParent.getParentConfig().getName());
 					bindedInterfaceParent.getParentConfig().flushRec(currentInterface,flushedInterface);
 				}
 			}catch(Exception e) {

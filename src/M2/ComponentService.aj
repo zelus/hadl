@@ -28,6 +28,10 @@ import M2.exceptions.ConfigurationException;
  */
 public abstract class ComponentService extends ComponentInterface {
 
+	public pointcut callService(ComponentService service) :
+		call( * ComponentService.call(..)) && target(service);
+	
+	
 	protected ArrayList<ComponentPort> reqPorts;
 	protected ArrayList<ComponentPort> provPorts;
 	
@@ -80,7 +84,6 @@ public abstract class ComponentService extends ComponentInterface {
 		 * launch and it needs reqPorts values. The runtime will compute the request
 		 * and ensure that values are correctly set.
 		 */
-		System.out.println("[HADL-RUNTIME] Starting " + this.name + " service ...");
 		Object runResult = run();
 		/*
 		 * Tell to the configuration that the service ended and the provPorts need to

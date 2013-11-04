@@ -43,6 +43,14 @@ public abstract class ComponentPort extends ComponentInterface {
 		return false;
 	}
 	
+	public final void updateFrom(ConnectorRole connectorRole) {
+		setValue(connectorRole.getValue());
+	}
+	
+	public final void updateFrom(ConfigurationPort configurationPort) {
+		setValue(configurationPort.getValue());
+	}
+	
 	/**
 	 * Set the value associated to the current port.
 	 * @param object the new value to set.

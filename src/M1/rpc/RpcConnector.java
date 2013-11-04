@@ -16,6 +16,7 @@ public class RpcConnector extends Connector {
 		this.addToRole(clientReceiverRole);
 		
 		this.setGlue(new ConnectorGlue(clientSenderRole, clientReceiverRole));
+		//this.setGlue(new RpcConnectorGlue(clientSenderRole, clientReceiverRole));
 	}
 
 }

@@ -52,6 +52,10 @@ public abstract class ConfigurationRole extends ConfigurationInterface {
 		return false;
 	}
 	
+	public final void updateFrom(ConnectorRole connectorRole) {
+		setValue(connectorRole.getValue());
+	}
+	
 	/**
 	 * Set the value associated to the current role.
 	 * @param object the new value to set.

@@ -14,6 +14,12 @@ import M2.exceptions.GlueException;
  */
 public class ConnectorGlue {
 	
+	public pointcut glueCalled():
+		call(* callGlue(..));
+	
+	public pointcut defaultGlueCalled():
+		execution(* defaultGlueOperation(..));
+	
 	protected ConnectorRole fromRole;
 	protected ConnectorRole toRole;
 	
@@ -55,7 +61,6 @@ public class ConnectorGlue {
 	 * </p>
 	 */
 	public final void callGlue() throws ConfigurationException {
-		System.out.println("[HADL-RUNTIME] Starting glue ...");
 		this.runGlue();
 		this.toRole.flush();
 	}
@@ -67,11 +72,14 @@ public class ConnectorGlue {
 	 * this method has to be override.
 	 * </p>
 	 */
-	public void runGlue() {
+	protected void runGlue() {
 		/*
 		 * Default glue operation : identity.
 		 */
-		System.out.println("[HADL-RUNTIME] Running default glue operation");
+		defaultGlueOperation();
+	}
+	
+	private void defaultGlueOperation() {
 		this.toRole.setValue(this.fromRole.getValue());
 	}
 }
