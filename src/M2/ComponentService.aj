@@ -90,7 +90,6 @@ public abstract class ComponentService extends ComponentInterface {
 		 * be flush to update other component's required ports.
 		 */
 		flush();
-		System.out.println("[HADL-RUNTIME] " + this.name + " service finish without error");
 		return runResult;
 	}
 	

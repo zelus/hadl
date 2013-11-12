@@ -19,6 +19,10 @@ public aspect Tracer {
 		System.out.println(hadlPrefix + "Starting " + service.getName() + " service ...");
 	}
 	
+	after(ComponentService service): ComponentService.callService(service) {
+		System.out.println(hadlPrefix + service.getName() + " service finish without error");
+	}
+	
 	before(Configuration configuration, Interface in, Interface out) : Configuration.flushPropagate(configuration, in, out) {
 		if(in instanceof ComponentPort) {
 			System.out.println(hadlPrefix + "Propagating port " + in.getName() + " value to role " + out.getName());
