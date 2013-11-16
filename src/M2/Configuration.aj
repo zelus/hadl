@@ -30,29 +30,6 @@ import M2.exceptions.ConnectorException;
  */
 public class Configuration extends Element {
 	
-	public pointcut bindDelegation(Configuration configuration, Interface iface) :
-		call(* flushRec(..)) &&
-		withincode(* Configuration.bind(..)) &&
-		this(configuration) && 
-		args(iface,..);
-	
-	public pointcut flushPropagate(Configuration configuration, Interface in, Interface out) :
-		call( * updateFrom(..)) &&
-		withincode(* Configuration.flushRec(..)) &&
-		target(out) &&
-		args(in) && 
-		this(configuration);
-	
-	public pointcut bindPropagate(Configuration configuration, Interface in, Interface out) :
-		call( * updateFrom(..)) &&
-		withincode(* Configuration.bind(..)) &&
-		target(out) &&
-		args(in) && 
-		this(configuration);
-	
-	public pointcut flush(Configuration configuration, Interface iface) : 
-		call(* flushRec(..)) && this(configuration) && args(iface,..);
-	
 	private ArrayList<Component> components;
 	private ArrayList<Connector> connectors;
 	private ArrayList<Attachment> attachments;
@@ -365,151 +342,15 @@ public class Configuration extends Element {
 		return toRoles;
 	}
 	
-	/**
-	 * Runtime function : process the flush of the given interface.
-	 * @param elementInterface the interface to flush.
-	 * @throws ConfigurationException if flush is called for a service.
-	 */
-	public final void flush(Interface elementInterface) throws ConfigurationException {
-		this.flushRec(elementInterface, new ArrayList<Interface>());
+	public Collection<Attachment> getAttachments() {
+		return attachments;
 	}
 	
-	/**
-	 * Runtime function : process the flush of the given interface.
-	 * @param elementInterface the interface to flush.
-	 * @param flushedInterfaces the interfaces already flushed in the current flush
-	 * execution (this avoid infinite flush loop).
-	 * @throws ConfigurationException if flush is called for a service.
-	 */
-	private final void flushRec(Interface elementInterface,Collection<Interface> flushedInterfaces) throws ConfigurationException {
-		if(elementInterface == null) {
-			return;
-		}
-		if(elementInterface instanceof ComponentService) {
-			throw new ConfigurationException("Cannot flush a service");
-		}
-		if(flushedInterfaces.contains(elementInterface)) {
-			return;
-		}
-		flushedInterfaces.add(elementInterface);
-		/*
-		 * First run the local bindings
-		 */
-		this.bind(elementInterface,flushedInterfaces);
-		/*
-		 * Search in the attachment list if there is any attachment matching
-		 * the interface asking for a flush.
-		 */
-		Iterator<Attachment> it = attachments.iterator();
-		while(it.hasNext()) {
-			Attachment currentAttachment = it.next();
-			/*
-			 * The flush concerns a component port.
-			 */
-			if(currentAttachment.getComponentPort().equals(elementInterface)) {
-				currentAttachment.getConnectorRole().updateFrom(currentAttachment.getComponentPort());
-				if(currentAttachment.getConnectorRole().getParent().getSubConfig() != null) {
-					currentAttachment.getConnectorRole().getParent().getSubConfig().flushRec(currentAttachment.getConnectorRole(), flushedInterfaces);
-				}
-				else {
-					/*
-					 * Glue call will call recursively flush operation.
-					 */
-					currentAttachment.getConnectorRole().getParent().getGlue().callGlue();
-				}
-			}
-			/*
-			 * The flush concerns a connector role.
-			 */
-			if(currentAttachment.getConnectorRole().equals(elementInterface)) {
-				currentAttachment.getComponentPort().updateFrom(currentAttachment.getConnectorRole());
-				if(currentAttachment.getComponentPort().getParent().getSubConfig() != null) {
-					currentAttachment.getComponentPort().getParent().getSubConfig().flushRec(currentAttachment.getComponentPort(), flushedInterfaces);
-				}
-			}
-			/*
-			 * In HADL, configuration cannot be attached to other elements. To
-			 * attach a configuration it needs to be the sub-configuration of an
-			 * other element. In that case attachments are done on the parent
-			 * element.
-			 */
-		}
+	public Collection<Binding> getBindings() {
+		return bindings;
 	}
 	
-	/**
-	 * Runtime function : process the binding of the given interface.
-	 * 
-	 * The binding process is done on the current configuration context.
-	 * @param elementInterface the interface to bind.
-	 * @param flushedInterface the interfaces already flushed in the current flush
-	 * execution (this avoid infinite flush loop).
-	 */
-	private final void bind(Interface elementInterface, Collection<Interface> flushedInterface) {
-		ArrayList<Interface> bindedInterfaces = new ArrayList<Interface>();
-		Iterator<Binding> it = this.bindings.iterator();
-		/*
-		 * Search in the current bindings if there is some matching
-		 * the given interface.
-		 */
-		while(it.hasNext()) {
-			Binding currentBinding = it.next();
-			if(elementInterface.equals(currentBinding.getComponentPort())) {
-				if(!flushedInterface.contains(currentBinding.getConfigurationPort())) {
-					currentBinding.getConfigurationPort().updateFrom(currentBinding.getComponentPort());
-					bindedInterfaces.add(currentBinding.getConfigurationPort());
-				}
-			}
-			if(elementInterface.equals(currentBinding.getConfigurationPort())) {
-				if(!flushedInterface.contains(currentBinding.getComponentPort())) {
-					currentBinding.getComponentPort().updateFrom(currentBinding.getConfigurationPort());
-					bindedInterfaces.add(currentBinding.getComponentPort());
-				}
-			}
-			if(elementInterface.equals(currentBinding.getConnectorRole())) {
-				if(!flushedInterface.contains(currentBinding.getConfigurationRole())) {
-					currentBinding.getConfigurationRole().updateFrom(currentBinding.getConnectorRole());
-					bindedInterfaces.add(currentBinding.getConfigurationRole());
-				}
-			}
-			if(elementInterface.equals(currentBinding.getConfigurationRole())) {
-				if(!flushedInterface.contains(currentBinding.getConnectorRole())) {
-					currentBinding.getConnectorRole().updateFrom(currentBinding.getConfigurationRole());
-					bindedInterfaces.add(currentBinding.getConnectorRole());
-				}
-			}
-		}
-		/*
-		 * No binding found.
-		 */
-		if(bindedInterfaces.isEmpty()) {
-			return;
-		}
-		Iterator<Interface> binded_it = bindedInterfaces.iterator();
-		/*
-		 * Process the binded interfaces and flush them.
-		 */
-		while(binded_it.hasNext()) {
-			Interface currentInterface = binded_it.next();
-			try {
-				if(currentInterface.getParent() instanceof Configuration) {
-				//	System.out.println("[HADL-RUNTIME] Delegating " + currentInterface.getName() + " flush to Configuration " + ((Configuration)currentInterface.getParent()).getName());
-					((Configuration)currentInterface.getParent()).flushRec(currentInterface,flushedInterface);
-				}
-				else if(currentInterface.getParent() instanceof Component) {
-					Component bindedInterfaceParent = (Component)currentInterface.getParent();
-				//	System.out.println("[HADL-RUNTIME] Delegating " + currentInterface.getName() + " flush to Configuration " + bindedInterfaceParent.getParentConfig().getName());
-					bindedInterfaceParent.getParentConfig().flushRec(currentInterface,flushedInterface);	
-				}
-				else if(currentInterface.getParent() instanceof Connector) {
-					Connector bindedInterfaceParent = (Connector)currentInterface.getParent();
-				//	System.out.println("[HADL-RUNTIME] Delegating " + currentInterface.getName() + "flush to Configuration " + bindedInterfaceParent.getParentConfig().getName());
-					bindedInterfaceParent.getParentConfig().flushRec(currentInterface,flushedInterface);
-				}
-			}catch(Exception e) {
-				System.out.println("Error in binding " + elementInterface.getName() + " with " + this.getName() + " : " + e.getMessage());
-			}
-		}
-	}
+
 	
 	/**
 	 * Runtime helper.
@@ -566,6 +407,5 @@ public class Configuration extends Element {
 		}
 		return null;
 	}
-	
 }
 

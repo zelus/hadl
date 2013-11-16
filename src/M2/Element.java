@@ -90,4 +90,13 @@ public class Element {
 	public Collection<Property> getProperties() {
 		return properties;
 	}
+	
+	/**
+	 * @return the parent of the element.
+	 * 
+	 * The parent is null for Configuration.
+	 */
+	public Configuration getParentConfig() {
+		return null;
+	}
 }

@@ -62,5 +62,10 @@ public abstract class ComponentPort extends ComponentInterface {
 	 * @return the value associated to the port.
 	 */
 	public abstract Object getValue();
+	
+	@Override
+	public String toString() {
+		return "component port " + this.name;
+	}
 
 }

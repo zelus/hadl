@@ -27,6 +27,7 @@ public class App {
 			clientSendMessage.call();
 			
 		}catch(Exception e) {
+			System.out.println("Exception during service execution");
 			System.out.println(e.getMessage());
 		}
 	}

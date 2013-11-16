@@ -10,6 +10,7 @@ import M2.Connector;
 import M2.ConnectorGlue;
 import M2.ConnectorRole;
 import M2.Interface;
+import M2.Runner;
 
 public aspect Tracer {
 
@@ -23,17 +24,19 @@ public aspect Tracer {
 		System.out.println(hadlPrefix + service.getName() + " service finish without error");
 	}
 	
-	before(Configuration configuration, Interface in, Interface out) : Configuration.flushPropagate(configuration, in, out) {
-		if(in instanceof ComponentPort) {
+	before(Interface in, Interface out) : Runner.flushPropagate(in, out) {
+		System.out.println(hadlPrefix + "Propagating " + in.toString() + " value to " + out.toString());
+		/*if(in instanceof ComponentPort) {
 			System.out.println(hadlPrefix + "Propagating port " + in.getName() + " value to role " + out.getName());
 		}
 		if(in instanceof ConnectorRole) {
 			System.out.println(hadlPrefix + "Propagating role " + in.getName() + " value to port " + out.getName());
-		}
+		}*/
 	}
 	
-	before(Configuration configuration, Interface in, Interface out) : Configuration.bindPropagate(configuration, in, out) {
-		if(in instanceof ComponentPort) {
+	before(Interface in, Interface out) : Runner.bindPropagate(in, out) {
+		System.out.println(hadlPrefix + "Binding " + in.toString() + " to " + out.toString());
+		/*if(in instanceof ComponentPort) {
 			System.out.println(hadlPrefix + "Binding component port " + in.getName() + " to configuration port " + out.getName());
 		}
 		if(in instanceof ConfigurationPort) {
@@ -44,29 +47,27 @@ public aspect Tracer {
 		}
 		if(in instanceof ConfigurationRole) {
 			System.out.println(hadlPrefix + "Binding configuration role " + in.getName() + " to connector role " + out.getName());
-		}
+		}*/
 	}
 	
-	before(Configuration configuration, Interface iface) : Configuration.bindDelegation(configuration , iface) {
-		if(iface.getParent() instanceof Configuration) {
-			System.out.println(hadlPrefix + "Delegating " + iface.getName() + " flush to Configuration " + ((Configuration)iface.getParent()).getName());
+	before(Configuration configuration, Interface iface) : Runner.bindDelegation(configuration , iface) {
+		/*if(iface.getParent() instanceof Configuration) {
+			System.out.println(hadlPrefix + "Delegating " + iface.toString() + " flush to Configuration " + ((Configuration)iface.getParent()).getName());
 		}
-		else if(iface.getParent() instanceof Component) {
-			Component bindedInterfaceParent = (Component)iface.getParent();
-			System.out.println(hadlPrefix + "Delegating " + iface.getName() + " flush to Configuration " + bindedInterfaceParent.getParentConfig().getName());
-		}
-		else if(iface.getParent() instanceof Connector) {
-			Connector bindedInterfaceParent = (Connector)iface.getParent();
-			System.out.println(hadlPrefix + "Delegating " + iface.getName() + "flush to Configuration " + bindedInterfaceParent.getParentConfig().getName());
-		}
+		else {
+			System.out.println(hadlPrefix + "Delegating " + iface.toString() + " flush to Configuration " + iface.getParent().getParentConfig().getName());
+		}*/
 	}
 	
 	before() : ConnectorGlue.glueCalled() {
 		System.out.println(hadlPrefix + "Calling connector glue operation");
 	}
 	
-	before(Configuration configuration, Interface iface) : Configuration.flush(configuration, iface) { 
-		System.out.println(hadlPrefix + "Configuration " + configuration.getName() + " flushing " + iface.getName());
+	before(Configuration configuration, Interface iface) : Runner.flush(configuration, iface) { 
+		if(configuration == null) {
+			configuration = iface.getParent().getParentConfig();
+		}
+		System.out.println(hadlPrefix + "Configuration " + configuration.getName() + " flushing " + iface.toString());
 	}
 	
 	after() : ConnectorGlue.defaultGlueCalled() {

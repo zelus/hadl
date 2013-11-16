@@ -41,5 +41,10 @@ public abstract class Interface {
 		}
 		return false;
 	}
+	
+	@Override
+	public String toString() {
+		return this.name;
+	}
 
 }

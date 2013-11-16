@@ -147,6 +147,7 @@ public class Connector extends Element {
 	/**
 	 * @return the configuration handling the connector.
 	 */
+	@Override
 	public Configuration getParentConfig() {
 		return parentConfig;
 	}

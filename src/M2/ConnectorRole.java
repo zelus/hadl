@@ -51,7 +51,8 @@ public abstract class ConnectorRole extends ConnectorInterface {
 	 * </p>
 	 */
 	public final void flush() throws ConfigurationException {
-		this.parent.getParentConfig().flush(this);
+		//this.parent.getParentConfig().flush(this);
+		//Runner.getInstance().flushInterface(elementInterface))(this);
 	}
 	
 	public final void updateFrom(ComponentPort componentPort) {
@@ -73,4 +74,9 @@ public abstract class ConnectorRole extends ConnectorInterface {
 	 * @return the value associated to the role.
 	 */
 	public abstract Object getValue();
+	
+	@Override
+	public String toString() {
+		return "connector role " + this.name;
+	}
 }

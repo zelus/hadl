@@ -101,7 +101,8 @@ public abstract class ComponentService extends ComponentInterface {
 	public final void flush() throws ConfigurationException {
 		Iterator<ComponentPort> it = provPorts.iterator();
 		while(it.hasNext()) {
-			this.getParent().getParentConfig().flush(it.next());
+			Runner.getInstance().flushInterface(it.next());
+			//this.getParent().getParentConfig().flush(it.next());
 		}
 	}
 	
@@ -110,6 +111,11 @@ public abstract class ComponentService extends ComponentInterface {
 	 * @return the result of the service execution.
 	 */
 	protected abstract Object run();
+	
+	@Override
+	public String toString() {
+		return "component service " + this.name;
+	}
 	
 	/**
 	 * Check if all the given ports belongs to the same component as the current service

@@ -68,5 +68,10 @@ public abstract class ConfigurationPort extends ConfigurationInterface {
 	 * @return the value associated to the port.
 	 */
 	public abstract Object getValue();
+	
+	@Override
+	public String toString() {
+		return "configuration port " + this.name;
+	}
 
 }
