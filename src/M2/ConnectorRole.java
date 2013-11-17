@@ -50,10 +50,10 @@ public abstract class ConnectorRole extends ConnectorInterface {
 	 * The flush ensure that setValue() method forwards has been executed.
 	 * </p>
 	 */
-	public final void flush() throws ConfigurationException {
+	/*public final void flush() throws ConfigurationException {
 		//this.parent.getParentConfig().flush(this);
 		//Runner.getInstance().flushInterface(elementInterface))(this);
-	}
+	}*/
 	
 	public final void updateFrom(ComponentPort componentPort) {
 		setValue(componentPort.getValue());

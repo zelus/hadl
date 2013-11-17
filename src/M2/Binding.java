@@ -149,6 +149,22 @@ public class Binding extends Link{
 		return this.configurationRole;
 	}
 	
+	public Interface getBindingOf(Interface iface) {
+		if(iface instanceof ComponentPort && iface.equals(this.componentPort)) {
+			return this.configurationPort;
+		}
+		if(iface instanceof ConfigurationPort && iface.equals(this.configurationPort)) {
+			return this.componentPort;
+		}
+		if(iface instanceof ConnectorRole && iface.equals(this.connectorRole)) {
+			return this.configurationRole;
+		}
+		if(iface instanceof ConfigurationRole && iface.equals(this.configurationRole)) {
+			return this.connectorRole;
+		}
+		return null;
+	}
+	
 	/**
 	 * Check if the given interfaces are on adjacent hierarchical levels.
 	 * @param i1 first interface.

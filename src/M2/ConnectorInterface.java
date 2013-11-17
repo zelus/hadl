@@ -4,7 +4,7 @@ package M2;
  * High-level connector interface, superclass of connector roles.
  * @author CaterpillarTeam
  */
-public class ConnectorInterface extends Interface {
+public abstract class ConnectorInterface extends Interface implements Valuable {
 
 	protected Connector parent;
 	
@@ -21,6 +21,11 @@ public class ConnectorInterface extends Interface {
 	@Override
 	public Connector getParent() {
 		return parent;
+	}
+
+	@Override
+	public void updateFrom(Valuable iface) {
+		this.setValue(iface.getValue());
 	}
 
 }

@@ -5,7 +5,7 @@ package M2;
  * and roles.
  * @author CaterpillarTeam
  */
-public class ConfigurationInterface extends Interface{
+public abstract class ConfigurationInterface extends Interface implements Valuable {
 
 	protected Configuration parent;
 	
@@ -22,5 +22,10 @@ public class ConfigurationInterface extends Interface{
 	@Override
 	public Configuration getParent() {
 		return this.parent;
+	}
+	
+	@Override
+	public void updateFrom(Valuable iface) {
+		this.setValue(iface.getValue());
 	}
 }

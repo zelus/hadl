@@ -133,30 +133,35 @@ public class Runner {
 		 */
 		while(it.hasNext()) {
 			Binding currentBinding = it.next();
-			if(elementInterface.equals(currentBinding.getComponentPort())) {
+			Interface bindedInterface = currentBinding.getBindingOf(elementInterface);
+			if(bindedInterface != null && !flushedInterface.contains(bindedInterface)) {
+				bindedInterface.updateFrom(elementInterface);
+				bindedInterfaces.add(bindedInterface);
+			}
+			/*if(elementInterface.equals(currentBinding.getComponentPort())) {
 				if(!flushedInterface.contains(currentBinding.getConfigurationPort())) {
 					currentBinding.getConfigurationPort().updateFrom(currentBinding.getComponentPort());
 					bindedInterfaces.add(currentBinding.getConfigurationPort());
 				}
-			}
-			if(elementInterface.equals(currentBinding.getConfigurationPort())) {
+			}*/
+			/*if(elementInterface.equals(currentBinding.getConfigurationPort())) {
 				if(!flushedInterface.contains(currentBinding.getComponentPort())) {
 					currentBinding.getComponentPort().updateFrom(currentBinding.getConfigurationPort());
 					bindedInterfaces.add(currentBinding.getComponentPort());
 				}
-			}
-			if(elementInterface.equals(currentBinding.getConnectorRole())) {
+			}*/
+			/*if(elementInterface.equals(currentBinding.getConnectorRole())) {
 				if(!flushedInterface.contains(currentBinding.getConfigurationRole())) {
 					currentBinding.getConfigurationRole().updateFrom(currentBinding.getConnectorRole());
 					bindedInterfaces.add(currentBinding.getConfigurationRole());
 				}
-			}
-			if(elementInterface.equals(currentBinding.getConfigurationRole())) {
+			}*/
+			/*if(elementInterface.equals(currentBinding.getConfigurationRole())) {
 				if(!flushedInterface.contains(currentBinding.getConnectorRole())) {
 					currentBinding.getConnectorRole().updateFrom(currentBinding.getConfigurationRole());
 					bindedInterfaces.add(currentBinding.getConnectorRole());
 				}
-			}
+			}*/
 		}
 		/*
 		 * No binding found.

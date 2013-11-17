@@ -10,7 +10,7 @@ package M2;
  * </p>
  * @author CaterpillarTeam
  */
-public abstract class ComponentPort extends ComponentInterface {
+public abstract class ComponentPort extends ComponentInterface implements Valuable {
 
 	/**
 	 * Create a new port for the given component.
@@ -43,25 +43,10 @@ public abstract class ComponentPort extends ComponentInterface {
 		return false;
 	}
 	
-	public final void updateFrom(ConnectorRole connectorRole) {
-		setValue(connectorRole.getValue());
+	@Override
+	public void updateFrom(Valuable iface) {
+		setValue(iface.getValue());
 	}
-	
-	public final void updateFrom(ConfigurationPort configurationPort) {
-		setValue(configurationPort.getValue());
-	}
-	
-	/**
-	 * Set the value associated to the current port.
-	 * @param object the new value to set.
-	 */
-	public abstract void setValue(Object object);
-	
-	/**
-	 * Returns the value associated to the current port.
-	 * @return the value associated to the port.
-	 */
-	public abstract Object getValue();
 	
 	@Override
 	public String toString() {
