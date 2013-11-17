@@ -15,10 +15,10 @@ import M2.exceptions.BindingException;
  */
 public class Binding extends Link{
 
-	private ComponentPort componentPort;
-	private ConfigurationPort configurationPort;
-	private ConnectorRole connectorRole;
-	private ConfigurationRole configurationRole;
+	private Valuable componentPort;
+	private Valuable configurationPort;
+	private Valuable connectorRole;
+	private Valuable configurationRole;
 	
 	
 	/**
@@ -121,35 +121,35 @@ public class Binding extends Link{
 	 * @return the component port involved in the binding if there is one,
 	 * null otherwise.
 	 */
-	public ComponentPort getComponentPort() {
+	/*public ComponentPort getComponentPort() {
 		return this.componentPort;
-	}
+	}*/
 	
 	/**
 	 * @return the configuration port involved in the binding if there is one,
 	 * null otherwise.
 	 */
-	public ConfigurationPort getConfigurationPort() {
+	/*public ConfigurationPort getConfigurationPort() {
 		return this.configurationPort;
-	}
+	}*/
 	
 	/**
 	 * @return the connector role involved in the binding if there is one,
 	 * null otherwise.
 	 */
-	public ConnectorRole getConnectorRole() {
+	/*public ConnectorRole getConnectorRole() {
 		return this.connectorRole;
-	}
+	}*/
 	
 	/**
 	 * @return the configuration role involved in the binding if there is one,
 	 * null otherwise.
 	 */
-	public ConfigurationRole getConfigurationRole() {
+	/*public ConfigurationRole getConfigurationRole() {
 		return this.configurationRole;
-	}
+	}*/
 	
-	public Interface getBindingOf(Interface iface) {
+	public Valuable getBindingOf(Valuable iface) {
 		if(iface instanceof ComponentPort && iface.equals(this.componentPort)) {
 			return this.configurationPort;
 		}

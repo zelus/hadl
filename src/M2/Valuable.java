@@ -7,5 +7,7 @@ public interface Valuable {
 	public abstract Object getValue();
 
 	public void updateFrom(Valuable iface);
+	
+	public boolean equals(Object obj);
 
 }

@@ -1,6 +1,5 @@
 package M2;
 
-import M2.exceptions.ConfigurationException;
 
 /**
  * Defines a connector role.
@@ -43,37 +42,6 @@ public abstract class ConnectorRole extends ConnectorInterface {
 		}
 		return false;
 	}
-	
-	/**
-	 * Ask the runtime to flush the connector role.
-	 * <p>
-	 * The flush ensure that setValue() method forwards has been executed.
-	 * </p>
-	 */
-	/*public final void flush() throws ConfigurationException {
-		//this.parent.getParentConfig().flush(this);
-		//Runner.getInstance().flushInterface(elementInterface))(this);
-	}*/
-	
-	public final void updateFrom(ComponentPort componentPort) {
-		setValue(componentPort.getValue());
-	}
-	
-	public final void updateFrom(ConfigurationRole configurationRole) {
-		setValue(configurationRole.getValue());
-	}
-	
-	/**
-	 * Set the value associated to the current role.
-	 * @param obj the new value to set.
-	 */
-	public abstract void setValue(Object obj);
-	
-	/**
-	 * Returns the value associated to the current role.
-	 * @return the value associated to the role.
-	 */
-	public abstract Object getValue();
 	
 	@Override
 	public String toString() {
