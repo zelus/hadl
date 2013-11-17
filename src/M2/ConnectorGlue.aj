@@ -60,7 +60,7 @@ public class ConnectorGlue {
 	 * Call the user-defined method runGlue() and define the basic flush policy.
 	 * </p>
 	 */
-	public final ConnectorRole callGlue() throws ConfigurationException {
+	public final ConnectorRole callGlue() {
 		this.runGlue();
 		return this.toRole;
 		//Runner.getInstance().flushInterface(this.toRole);

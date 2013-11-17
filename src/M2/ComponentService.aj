@@ -28,9 +28,11 @@ import M2.exceptions.ConfigurationException;
  */
 public abstract class ComponentService extends ComponentInterface {
 
+	public pointcut runService(ComponentService service) :
+		call( * ComponentService.run(..)) && target(service);
+	
 	public pointcut callService(ComponentService service) :
 		call( * ComponentService.call(..)) && target(service);
-	
 	
 	protected ArrayList<ComponentPort> reqPorts;
 	protected ArrayList<ComponentPort> provPorts;
@@ -85,25 +87,7 @@ public abstract class ComponentService extends ComponentInterface {
 		 * and ensure that values are correctly set.
 		 */
 		Object runResult = run();
-		/*
-		 * Tell to the configuration that the service ended and the provPorts need to
-		 * be flush to update other component's required ports.
-		 */
-		flush();
 		return runResult;
-	}
-	
-	/**
-	 * Ask the runtime to flush all the required ports associated to the current service.
-	 * 
-	 * The flush ensure that getValue() method backward has been executed.
-	 */
-	public final void flush() throws ConfigurationException {
-		Iterator<ComponentPort> it = provPorts.iterator();
-		while(it.hasNext()) {
-			Runner.getInstance().flushInterface(it.next());
-			//this.getParent().getParentConfig().flush(it.next());
-		}
 	}
 	
 	/**

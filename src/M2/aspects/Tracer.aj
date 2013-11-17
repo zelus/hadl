@@ -3,7 +3,6 @@ package M2.aspects;
 import M2.ComponentService;
 import M2.Configuration;
 import M2.ConnectorGlue;
-import M2.Runner;
 import M2.Valuable;
 
 public aspect Tracer {

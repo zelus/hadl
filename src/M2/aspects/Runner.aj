@@ -1,9 +1,14 @@
-package M2;
+package M2.aspects;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
+import M2.Attachment;
+import M2.Binding;
+import M2.Configuration;
+import M2.ConnectorRole;
+import M2.Valuable;
 import M2.exceptions.ConfigurationException;
 
 public class Runner {
@@ -45,7 +50,7 @@ public class Runner {
 	 * @param elementInterface the interface to flush.
 	 * @throws ConfigurationException if flush is called for a service.
 	 */
-	public final void flushInterface(Valuable elementInterface) throws ConfigurationException{
+	public final void flushInterface(Valuable elementInterface) {
 		this.flushRec(elementInterface,null, new ArrayList<Valuable>());
 	}
 	
@@ -56,7 +61,7 @@ public class Runner {
 	 * execution (this avoid infinite flush loop).
 	 * @throws ConfigurationException if flush is called for a service.
 	 */
-	private final void flushRec(Valuable elementInterface,Configuration context, Collection<Valuable> flushedInterfaces) throws ConfigurationException {
+	private final void flushRec(Valuable elementInterface,Configuration context, Collection<Valuable> flushedInterfaces) {
 		if(elementInterface == null) {
 			return;
 		}
