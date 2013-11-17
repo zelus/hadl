@@ -16,6 +16,10 @@ public class Attachment extends Link{
 	private Valuable componentPort;
 	private Valuable connectorRole;
 	
+	public pointcut createAttachment(String name, Interface i1, Interface i2) :
+		execution( Attachment.new(..)) &&
+		args(name,i1,i2);
+	
 	/**
 	 * Create a new attachment between the given component and the given connector.
 	 * <p>
@@ -25,28 +29,11 @@ public class Attachment extends Link{
 	 * @param name the name of the attachment.
 	 * @param componentPort the component of the attachment.
 	 * @param connectorRole the connector of the attachment.
-	 * @throws AttachmentException if the attachment is not semantically correct (
-	 * attachments must be between provPort and fromRole or toRole and reqPort).
 	 */
-	public Attachment(String name, ComponentPort componentPort, ConnectorRole connectorRole) throws AttachmentException {
+	public Attachment(String name, ComponentPort componentPort, ConnectorRole connectorRole) {
 		super(name);
-		/*
-		 * Check if the given element to attach are acceptable. An acceptable 
-		 * case must be one of the following :
-		 * 	- The component port is a provided port AND the connector role is a from role.
-		 * 	- The component port is a required port AND the connector role is a to role.
-		 */
-		if(componentPort == null || connectorRole == null) {
-			throw new AttachmentException("Cannot create attachment from null");
-		}
-		if((componentPort.isProvPort() && connectorRole.isFromRole()) ||
-				(componentPort.isReqPort() && connectorRole.isToRole())) {
-			this.componentPort = componentPort;
-			this.connectorRole = connectorRole;		
-		}
-		else {
-			throw new AttachmentException("Invalid attachment, please connect a prov port to a from role or a req port to a to role");
-		}
+		this.componentPort = componentPort;
+		this.connectorRole = connectorRole;		
 	}
 	
 	/**
@@ -59,8 +46,6 @@ public class Attachment extends Link{
 	 * @param name the name of the attachment.
 	 * @param componentPort the component of the attachment.
 	 * @param connectorRole the connector of the attachment.
-	 * @throws AttachmentException if the attachment is not semantically correct (
-	 * attachments must be between provPort and fromRole or toRole and reqPort).
 	 */
 	public Attachment(String name, ConnectorRole connectorRole, ComponentPort componentPort) throws AttachmentException {
 		this(name,componentPort,connectorRole);

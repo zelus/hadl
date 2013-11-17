@@ -12,7 +12,6 @@ import M2.Connector;
 import M2.ConnectorInterface;
 import M2.ConnectorRole;
 import M2.Valuable;
-import M2.exceptions.ConfigurationException;
 
 public class Runner {
 
@@ -51,7 +50,6 @@ public class Runner {
 	/**
 	 * Runtime function : process the flush of the given interface.
 	 * @param elementInterface the interface to flush.
-	 * @throws ConfigurationException if flush is called for a service.
 	 */
 	public final void flushInterface(Valuable elementInterface) {
 		this.flushRec(elementInterface,null, new ArrayList<Valuable>());
@@ -62,7 +60,6 @@ public class Runner {
 	 * @param elementInterface the interface to flush.
 	 * @param flushedInterfaces the interfaces already flushed in the current flush
 	 * execution (this avoid infinite flush loop).
-	 * @throws ConfigurationException if flush is called for a service.
 	 */
 	private final void flushRec(Valuable elementInterface,Configuration context, Collection<Valuable> flushedInterfaces) {
 		if(elementInterface == null) {
