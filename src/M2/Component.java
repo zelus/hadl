@@ -179,6 +179,7 @@ public abstract class Component extends Element {
 	/**
 	 * @return the configuration representing the component.
 	 */
+	@Override
 	public final Configuration getSubConfig() {
 		return subConfig;
 	}

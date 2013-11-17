@@ -156,6 +156,7 @@ public class Connector extends Element {
 	 * @return the configuration representing the connector if the connector
 	 * is composite, null otherwise.
 	 */
+	@Override
 	public Configuration getSubConfig() {
 		return subConfig;
 	}

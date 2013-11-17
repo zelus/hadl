@@ -93,10 +93,23 @@ public class Element {
 	
 	/**
 	 * @return the parent of the element.
-	 * 
+	 * <p>
 	 * The parent is null for Configuration.
+	 * </p>
 	 */
 	public Configuration getParentConfig() {
+		return null;
+	}
+	
+	/**
+	 * @return the sub configuration of the element.
+	 * <p>
+	 * This method returns null for element which doesn't
+	 * contain a sub configuration and for configuration 
+	 * element because they cannot handle a sub configuration.
+	 * </p>
+	 */
+	public Configuration getSubConfig() {
 		return null;
 	}
 }

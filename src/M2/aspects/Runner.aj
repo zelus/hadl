@@ -6,7 +6,10 @@ import java.util.Iterator;
 
 import M2.Attachment;
 import M2.Binding;
+import M2.ComponentPort;
 import M2.Configuration;
+import M2.Connector;
+import M2.ConnectorInterface;
 import M2.ConnectorRole;
 import M2.Valuable;
 import M2.exceptions.ConfigurationException;
@@ -87,34 +90,37 @@ public class Runner {
 			/*
 			 * The flush concerns a component port.
 			 */
-			if(currentAttachment.getComponentPort().equals(elementInterface)) {
-				currentAttachment.getConnectorRole().updateFrom(currentAttachment.getComponentPort());
-				if(currentAttachment.getConnectorRole().getParent().getSubConfig() != null) {
-					this.flushRec(currentAttachment.getConnectorRole(),currentAttachment.getConnectorRole().getParent().getSubConfig(), flushedInterfaces);
+			Valuable attachedInterface = currentAttachment.getAttachmentOf(elementInterface);
+			if(attachedInterface != null) {
+				if(attachedInterface instanceof ConnectorInterface) {
+					attachedInterface.updateFrom(elementInterface);
+					if(attachedInterface.getParent().getSubConfig() != null) {
+						this.flushRec(attachedInterface,attachedInterface.getParent().getSubConfig(), flushedInterfaces);
+					}
+					else {
+						/*
+						 * Glue call will call recursively flush operation.
+						 */
+						ConnectorRole toFlush = ((Connector)attachedInterface.getParent()).getGlue().callGlue();
+						this.flushRec(toFlush,null,flushedInterfaces);
+					}
 				}
-				else {
-					/*
-					 * Glue call will call recursively flush operation.
-					 */
-					ConnectorRole toFlush = currentAttachment.getConnectorRole().getParent().getGlue().callGlue();
-					this.flushRec(toFlush,null,flushedInterfaces);
+				/*
+				 * The flush concerns a connector role.
+				 */
+				if(attachedInterface instanceof ComponentPort) {
+					attachedInterface.updateFrom(elementInterface);
+					if(attachedInterface.getParent().getSubConfig() != null) {
+						this.flushRec(attachedInterface, attachedInterface.getParent().getSubConfig(),flushedInterfaces);
+					}
 				}
+				/*
+				 * In HADL, configuration cannot be attached to other elements. To
+				 * attach a configuration it needs to be the sub-configuration of an
+				 * other element. In that case attachments are done on the parent
+				 * element.
+				 */
 			}
-			/*
-			 * The flush concerns a connector role.
-			 */
-			if(currentAttachment.getConnectorRole().equals(elementInterface)) {
-				currentAttachment.getComponentPort().updateFrom(currentAttachment.getConnectorRole());
-				if(currentAttachment.getComponentPort().getParent().getSubConfig() != null) {
-					this.flushRec(currentAttachment.getComponentPort(), currentAttachment.getComponentPort().getParent().getSubConfig(),flushedInterfaces);
-				}
-			}
-			/*
-			 * In HADL, configuration cannot be attached to other elements. To
-			 * attach a configuration it needs to be the sub-configuration of an
-			 * other element. In that case attachments are done on the parent
-			 * element.
-			 */
 		}
 	}
 	

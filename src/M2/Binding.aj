@@ -88,7 +88,7 @@ public class Binding extends Link{
 	
 	/**
 	 * Get the interface related to the given one.
-	 * @param iface to search from.
+	 * @param iface the interface to search from.
 	 * @return the related interface if it is known,
 	 * null otherwise.
 	 */

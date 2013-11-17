@@ -13,8 +13,8 @@ import M2.exceptions.AttachmentException;
  */
 public class Attachment extends Link{
 
-	private ComponentPort componentPort;
-	private ConnectorRole connectorRole;
+	private Valuable componentPort;
+	private Valuable connectorRole;
 	
 	/**
 	 * Create a new attachment between the given component and the given connector.
@@ -67,16 +67,18 @@ public class Attachment extends Link{
 	}
 	
 	/**
-	 * @return the component of the attachment.
+	 * Get the interface related to the given one.
+	 * @param iface the interface to search from.
+	 * @return the related interface if it is known,
+	 * null otherwise.
 	 */
-	public ComponentPort getComponentPort() {
-		return this.componentPort;
-	}
-	
-	/**
-	 * @return the connector of the attachment.
-	 */
-	public ConnectorRole getConnectorRole() {
-		return this.connectorRole;
+	public Valuable getAttachmentOf(Valuable iface) {
+		if(iface.equals(this.componentPort)) {
+			return this.connectorRole;
+		}
+		if(iface.equals(this.connectorRole)) {
+			return this.componentPort;
+		}
+		return null;
 	}
 }
