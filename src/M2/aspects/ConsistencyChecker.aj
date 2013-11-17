@@ -5,9 +5,12 @@ import M2.Binding;
 import M2.Component;
 import M2.ComponentPort;
 import M2.ComponentService;
+import M2.Configuration;
 import M2.ConfigurationPort;
 import M2.ConfigurationRole;
+import M2.Connector;
 import M2.ConnectorRole;
+import M2.Element;
 import M2.Interface;
 import M2.exceptions.ComponentServiceException;
 
@@ -73,6 +76,18 @@ public aspect ConsistencyChecker {
 			System.err.println("\tEnsure given interface are either provided/from or required/to");
 			System.err.println("at " + thisJoinPoint.getSourceLocation().getFileName() + " line " + thisJoinPoint.getSourceLocation().getLine());
 		}
+		return null;
+	}
+	
+	Object around(String name, Element parent) :
+		Configuration.createConfiguration(name,parent) {
+		if(parent instanceof Connector || parent instanceof Component || parent == null) {
+			return proceed(name,parent);
+		}
+		System.err.println(ccPrefix + "Cannot create configuration " + name + " : ");
+		System.err.println("\tInvalid configuration type, ensure configuration parent is either null, Component or Connector");
+		System.err.println("at " + thisJoinPoint.getSourceLocation().getFileName() + " line " + thisJoinPoint.getSourceLocation().getLine());
+		System.exit(-1);
 		return null;
 	}
 	

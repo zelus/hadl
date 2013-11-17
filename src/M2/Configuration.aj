@@ -41,12 +41,16 @@ public class Configuration extends Element {
 	private ArrayList<ConfigurationRole> fromRoles;
 	private ArrayList<ConfigurationRole> toRoles;
 	
+	public pointcut createConfiguration(String name, Element parent) :
+		execution( Configuration.new(..)) &&
+		args(name,parent);
+	
 	/**
-	 * Create a configuration with the given name and architectural level.
+	 * Create a configuration with the given name.
 	 * @param name the name of the configuration.
 	 * @param parent the parent of the configuration.
 	 */
-	public Configuration(String name, Element parent) throws ConfigurationException {
+	public Configuration(String name, Element parent) {
 		super(name,parent);
 		components = new ArrayList<Component>();
 		connectors = new ArrayList<Connector>();
@@ -66,16 +70,6 @@ public class Configuration extends Element {
 			}catch(ConnectorException e) {
 				System.out.println("Error in configuration creation : " + e.getMessage());
 			}
-		}
-		else if(parent == null) {
-			/*
-			 * Top level Configuration, doesn't provides any port, services and
-			 * roles. If such a behavior is needed put this in appropriate 
-			 * Element.
-			 */
-		}
-		else {
-			throw new ConfigurationException("Invalid configuration type");
 		}
 	}
 
