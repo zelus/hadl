@@ -3,7 +3,6 @@ package M2;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
 
 import M2.exceptions.ComponentServiceException;
 import M2.exceptions.ConfigurationException;
@@ -28,6 +27,10 @@ import M2.exceptions.ConfigurationException;
  */
 public abstract class ComponentService extends ComponentInterface {
 
+	public pointcut createService(String name,Component parent, ComponentPort[] reqPorts, ComponentPort[] provPorts) :
+		execution( ComponentService.new(..)) &&
+		args(name,parent,reqPorts,provPorts);
+	
 	public pointcut runService(ComponentService service) :
 		call( * ComponentService.run(..)) && target(service);
 	
@@ -47,16 +50,10 @@ public abstract class ComponentService extends ComponentInterface {
 	 * @throws ComponentServiceException when at least one port doesn't belong to 
 	 * the same parent component.
 	 */
-	public ComponentService(String name, Component parent, ComponentPort[] reqPorts, ComponentPort[] provPorts) throws ComponentServiceException {
+	public ComponentService(String name, Component parent, ComponentPort[] reqPorts, ComponentPort[] provPorts) {
 		super(name,parent);
-		/*
-		 * Check if all the given ports belong to the same
-		 * parent as the current service
-		 */
 		this.reqPorts = new ArrayList<ComponentPort>(Arrays.asList(reqPorts));
 		this.provPorts = new ArrayList<ComponentPort>(Arrays.asList(provPorts));
-		checkPorts(this.reqPorts);
-		checkPorts(this.provPorts);
 	}
 	
 	/**
@@ -81,11 +78,6 @@ public abstract class ComponentService extends ComponentInterface {
 	 * @return the object returned by the run() method.
 	 */
 	public final Object call() throws ConfigurationException {
-		/*
-		 * Tell to the configuration that a ComponentService is going to be
-		 * launch and it needs reqPorts values. The runtime will compute the request
-		 * and ensure that values are correctly set.
-		 */
 		Object runResult = run();
 		return runResult;
 	}
@@ -99,21 +91,6 @@ public abstract class ComponentService extends ComponentInterface {
 	@Override
 	public String toString() {
 		return "component service " + this.name;
-	}
-	
-	/**
-	 * Check if all the given ports belongs to the same component as the current service
-	 * @param ports the ports to check to.
-	 * @throws ComponentServiceException if at least one of the given ports doesn't belongs to the service component.
-	 */
-	private void checkPorts(Collection<ComponentPort> ports) throws ComponentServiceException {
-		Iterator<ComponentPort> it = ports.iterator();
-		while(it.hasNext()) {
-			String portParentName = it.next().getParent().getName();
-			if(!portParentName.equals(this.getParent().getName())) {
-				throw new ComponentServiceException("At least one of the used ports isn't associated to the service parent component");
-			}
-		}
 	}
 	
 }

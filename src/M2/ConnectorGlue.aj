@@ -1,6 +1,5 @@
 package M2;
 
-import M2.exceptions.ConfigurationException;
 import M2.exceptions.GlueException;
 
 /**
@@ -63,8 +62,6 @@ public class ConnectorGlue {
 	public final ConnectorRole callGlue() {
 		this.runGlue();
 		return this.toRole;
-		//Runner.getInstance().flushInterface(this.toRole);
-		//this.toRole.flush();
 	}
 	
 	/**
