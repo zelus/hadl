@@ -1,16 +1,11 @@
 package M2.aspects;
 
-import M2.Component;
-import M2.ComponentPort;
 import M2.ComponentService;
 import M2.Configuration;
-import M2.ConfigurationPort;
-import M2.ConfigurationRole;
-import M2.Connector;
 import M2.ConnectorGlue;
-import M2.ConnectorRole;
 import M2.Interface;
 import M2.Runner;
+import M2.Valuable;
 
 public aspect Tracer {
 
@@ -24,7 +19,7 @@ public aspect Tracer {
 		System.out.println(hadlPrefix + service.getName() + " service finish without error");
 	}
 	
-	before(Interface in, Interface out) : Runner.flushPropagate(in, out) {
+	before(Valuable in, Valuable out) : Runner.flushPropagate(in, out) {
 		System.out.println(hadlPrefix + "Propagating " + in.toString() + " value to " + out.toString());
 		/*if(in instanceof ComponentPort) {
 			System.out.println(hadlPrefix + "Propagating port " + in.getName() + " value to role " + out.getName());
@@ -34,7 +29,7 @@ public aspect Tracer {
 		}*/
 	}
 	
-	before(Interface in, Interface out) : Runner.bindPropagate(in, out) {
+	before(Valuable in, Valuable out) : Runner.bindPropagate(in, out) {
 		System.out.println(hadlPrefix + "Binding " + in.toString() + " to " + out.toString());
 		/*if(in instanceof ComponentPort) {
 			System.out.println(hadlPrefix + "Binding component port " + in.getName() + " to configuration port " + out.getName());
@@ -50,7 +45,7 @@ public aspect Tracer {
 		}*/
 	}
 	
-	before(Configuration configuration, Interface iface) : Runner.bindDelegation(configuration , iface) {
+	before(Configuration configuration, Valuable iface) : Runner.bindDelegation(configuration , iface) {
 		/*if(iface.getParent() instanceof Configuration) {
 			System.out.println(hadlPrefix + "Delegating " + iface.toString() + " flush to Configuration " + ((Configuration)iface.getParent()).getName());
 		}
@@ -63,7 +58,7 @@ public aspect Tracer {
 		System.out.println(hadlPrefix + "Calling connector glue operation");
 	}
 	
-	before(Configuration configuration, Interface iface) : Runner.flush(configuration, iface) { 
+	before(Configuration configuration, Valuable iface) : Runner.flush(configuration, iface) { 
 		if(configuration == null) {
 			configuration = iface.getParent().getParentConfig();
 		}

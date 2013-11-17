@@ -22,6 +22,11 @@ public abstract class ConnectorInterface extends Interface implements Valuable {
 	public Connector getParent() {
 		return parent;
 	}
+	
+	@Override
+	public Configuration getParentConfig() {
+		return parent.getParentConfig();
+	}
 
 	@Override
 	public void updateFrom(Valuable iface) {

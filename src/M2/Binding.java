@@ -150,16 +150,16 @@ public class Binding extends Link{
 	}*/
 	
 	public Valuable getBindingOf(Valuable iface) {
-		if(iface instanceof ComponentPort && iface.equals(this.componentPort)) {
+		if(iface.equals(this.componentPort)) {
 			return this.configurationPort;
 		}
-		if(iface instanceof ConfigurationPort && iface.equals(this.configurationPort)) {
+		if(iface.equals(this.configurationPort)) {
 			return this.componentPort;
 		}
-		if(iface instanceof ConnectorRole && iface.equals(this.connectorRole)) {
+		if(iface.equals(this.connectorRole)) {
 			return this.configurationRole;
 		}
-		if(iface instanceof ConfigurationRole && iface.equals(this.configurationRole)) {
+		if(iface.equals(this.configurationRole)) {
 			return this.connectorRole;
 		}
 		return null;

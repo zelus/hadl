@@ -25,6 +25,11 @@ public abstract class ConfigurationInterface extends Interface implements Valuab
 	}
 	
 	@Override
+	public Configuration getParentConfig() {
+		return getParent();
+	}
+	
+	@Override
 	public void updateFrom(Valuable iface) {
 		this.setValue(iface.getValue());
 	}

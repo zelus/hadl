@@ -22,4 +22,9 @@ public class ComponentInterface extends Interface {
 	public Component getParent() {
 		return parent;
 	}
+	
+	@Override
+	public Configuration getParentConfig() {
+		return parent.getParentConfig();
+	}
 }

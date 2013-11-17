@@ -16,24 +16,24 @@ public class Runner {
 		return RUNNER_INSTANCE;
 	}
 	
-	public pointcut bindDelegation(Configuration configuration, Interface iface) :
+	public pointcut bindDelegation(Configuration configuration, Valuable iface) :
 		call(* flushRec(..)) &&
 		withincode(* Runner.bind(..)) &&
 		args(iface,configuration,..);
 	
-	public pointcut flushPropagate(Interface in, Interface out) :
+	public pointcut flushPropagate(Valuable in, Valuable out) :
 		call( * updateFrom(..)) &&
 		withincode(* Runner.flushRec(..)) &&
 		target(out) &&
 		args(in);
 	
-	public pointcut bindPropagate(Interface in, Interface out) :
+	public pointcut bindPropagate(Valuable in, Valuable out) :
 		call( * updateFrom(..)) &&
 		withincode(* Runner.bind(..)) &&
 		target(out) &&
 		args(in);
 	
-	public pointcut flush(Configuration configuration, Interface iface) : 
+	public pointcut flush(Configuration configuration, Valuable iface) : 
 		call(* flushRec(..)) && args(iface,configuration,..);
 
 	private Runner() {
@@ -45,8 +45,8 @@ public class Runner {
 	 * @param elementInterface the interface to flush.
 	 * @throws ConfigurationException if flush is called for a service.
 	 */
-	public final void flushInterface(Interface elementInterface) throws ConfigurationException{
-		this.flushRec(elementInterface,null, new ArrayList<Interface>());
+	public final void flushInterface(Valuable elementInterface) throws ConfigurationException{
+		this.flushRec(elementInterface,null, new ArrayList<Valuable>());
 	}
 	
 	/**
@@ -56,12 +56,9 @@ public class Runner {
 	 * execution (this avoid infinite flush loop).
 	 * @throws ConfigurationException if flush is called for a service.
 	 */
-	private final void flushRec(Interface elementInterface,Configuration context, Collection<Interface> flushedInterfaces) throws ConfigurationException {
+	private final void flushRec(Valuable elementInterface,Configuration context, Collection<Valuable> flushedInterfaces) throws ConfigurationException {
 		if(elementInterface == null) {
 			return;
-		}
-		if(elementInterface instanceof ComponentService) {
-			throw new ConfigurationException("Cannot flush a service");
 		}
 		if(flushedInterfaces.contains(elementInterface)) {
 			return;
@@ -124,8 +121,11 @@ public class Runner {
 	 * @param flushedInterface the interfaces already flushed in the current flush
 	 * execution (this avoid infinite flush loop).
 	 */
-	private final void bind(Interface elementInterface,Configuration context, Collection<Interface> flushedInterface) {
-		ArrayList<Interface> bindedInterfaces = new ArrayList<Interface>();
+	private final void bind(Valuable elementInterface,Configuration context, Collection<Valuable> flushedInterface) {
+		if(elementInterface == null) {
+			return;
+		}
+		ArrayList<Valuable> bindedInterfaces = new ArrayList<Valuable>();
 		Iterator<Binding> it = context.getBindings().iterator();
 		/*
 		 * Search in the current bindings if there is some matching
@@ -133,35 +133,11 @@ public class Runner {
 		 */
 		while(it.hasNext()) {
 			Binding currentBinding = it.next();
-			Interface bindedInterface = currentBinding.getBindingOf(elementInterface);
+			Valuable bindedInterface = currentBinding.getBindingOf(elementInterface);
 			if(bindedInterface != null && !flushedInterface.contains(bindedInterface)) {
 				bindedInterface.updateFrom(elementInterface);
 				bindedInterfaces.add(bindedInterface);
 			}
-			/*if(elementInterface.equals(currentBinding.getComponentPort())) {
-				if(!flushedInterface.contains(currentBinding.getConfigurationPort())) {
-					currentBinding.getConfigurationPort().updateFrom(currentBinding.getComponentPort());
-					bindedInterfaces.add(currentBinding.getConfigurationPort());
-				}
-			}*/
-			/*if(elementInterface.equals(currentBinding.getConfigurationPort())) {
-				if(!flushedInterface.contains(currentBinding.getComponentPort())) {
-					currentBinding.getComponentPort().updateFrom(currentBinding.getConfigurationPort());
-					bindedInterfaces.add(currentBinding.getComponentPort());
-				}
-			}*/
-			/*if(elementInterface.equals(currentBinding.getConnectorRole())) {
-				if(!flushedInterface.contains(currentBinding.getConfigurationRole())) {
-					currentBinding.getConfigurationRole().updateFrom(currentBinding.getConnectorRole());
-					bindedInterfaces.add(currentBinding.getConfigurationRole());
-				}
-			}*/
-			/*if(elementInterface.equals(currentBinding.getConfigurationRole())) {
-				if(!flushedInterface.contains(currentBinding.getConnectorRole())) {
-					currentBinding.getConnectorRole().updateFrom(currentBinding.getConfigurationRole());
-					bindedInterfaces.add(currentBinding.getConnectorRole());
-				}
-			}*/
 		}
 		/*
 		 * No binding found.
@@ -169,24 +145,16 @@ public class Runner {
 		if(bindedInterfaces.isEmpty()) {
 			return;
 		}
-		Iterator<Interface> binded_it = bindedInterfaces.iterator();
+		Iterator<Valuable> binded_it = bindedInterfaces.iterator();
 		/*
 		 * Process the binded interfaces and flush them.
 		 */
 		while(binded_it.hasNext()) {
-			Interface currentInterface = binded_it.next();
+			Valuable currentInterface = binded_it.next();
 			try {
-				if(currentInterface.getParent() instanceof Configuration) {
-					this.flushRec(currentInterface,(Configuration)currentInterface.getParent(), flushedInterface);
-				}
-				else if(currentInterface.getParent() instanceof Component) {
-					this.flushRec(currentInterface, currentInterface.getParent().getParentConfig(), flushedInterface);	
-				}
-				else if(currentInterface.getParent() instanceof Connector) {
-					this.flushRec(currentInterface, currentInterface.getParent().getParentConfig(), flushedInterface);
-				}
+				this.flushRec(currentInterface, currentInterface.getParentConfig(), flushedInterface);
 			}catch(Exception e) {
-				System.out.println("Error in binding " + elementInterface.getName() + " with " + context.getName() + " : " + e.getMessage());
+				System.out.println("Error in binding " + elementInterface.toString() + " with " + context.getName() + " : " + e.getMessage());
 			}
 		}
 	}

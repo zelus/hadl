@@ -33,6 +33,17 @@ public abstract class Interface {
 	 */
 	public abstract Element getParent();
 	
+	/**
+	 * @return the configuration handling the interface.
+	 * <p>
+	 * If the interface is not handled by a configuration (eg.
+	 * a ComponentInterface, which is handled by a Component),
+	 * this method returns the configuration handling the parent
+	 * element.
+	 * </p>
+	 */
+	public abstract Configuration getParentConfig();
+	
 	@Override
 	public boolean equals(Object object) {
 		if(object instanceof Interface) {
