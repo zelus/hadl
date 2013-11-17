@@ -20,6 +20,9 @@ public class Binding extends Link{
 	private Valuable connectorRole;
 	private Valuable configurationRole;
 	
+	public pointcut createBinding(String name, Interface i1, Interface i2):
+		execution( Binding.new(..)) &&
+		args(name,i1,i2);
 	
 	/**
 	 * Create a new binding between the given component and the given configuration.
@@ -30,25 +33,11 @@ public class Binding extends Link{
 	 * @param name the name of the binding.
 	 * @param componentPort the component port of the binding.
 	 * @param configurationPort the configuration port of the binding.
-	 * @throws BindingException if given component and configuration are not
-	 * on adjacent hierarchical level or if the given ports doesn't have the same
-	 * type (required or provided).
 	 */
 	public Binding(String name, ComponentPort componentPort, ConfigurationPort configurationPort) throws BindingException {
 		super(name);
-		
-		if(!checkLevel(componentPort, configurationPort)) {
-			throw new BindingException("Cannot create binding on non-adjacent levels");
-		}
-		
-		if((componentPort.isReqPort() && configurationPort.isReqPort()) ||
-				componentPort.isProvPort() && configurationPort.isProvPort()) {
-			this.componentPort = componentPort;
-			this.configurationPort = configurationPort;
-		}
-		else {
-			throw new BindingException("Cannot create binding, please ensure that given ports are both provided or required");
-		}
+		this.componentPort = componentPort;
+		this.configurationPort = configurationPort;
 	}
 	
 	/**
@@ -61,9 +50,6 @@ public class Binding extends Link{
 	 * @param name the name of the binding.
 	 * @param configurationPort the configuration port of the binding.
 	 * @param componentPort the component port of the binding.
-	 * @throws BindingException if given component and configuration are not
-	 * on adjacent hierarchical level or if the given ports doesn't have the same
-	 * type (required or provided).
 	 */
 	public Binding(String name, ConfigurationPort configurationPort, ComponentPort componentPort) throws BindingException {
 		this(name, componentPort, configurationPort);
@@ -78,25 +64,11 @@ public class Binding extends Link{
 	 * @param name the name of the binding.
 	 * @param connectorRole the connector role of the binding.
 	 * @param configurationRole the configuration role of the binding.
-	 * @throws BindingException if given connector and configuration are not
-	 * on adjacent hierarchical level or if the given roles doesn't have the same
-	 * type (required or provided).
 	 */
-	public Binding(String name, ConnectorRole connectorRole, ConfigurationRole configurationRole) throws BindingException {
+	public Binding(String name, ConnectorRole connectorRole, ConfigurationRole configurationRole) {
 		super(name);
-		
-		if(!checkLevel(connectorRole, configurationRole)) {
-			throw new BindingException("Cannot create binding on non-adjacent levels");
-		}
-		
-		if((connectorRole.isFromRole() && configurationRole.isFromRole()) ||
-				connectorRole.isToRole() && configurationRole.isToRole()) {
-			this.connectorRole = connectorRole;
-			this.configurationRole = configurationRole;
-		}
-		else {
-			throw new BindingException("Cannot create binding, please ensure that given roles are both from or to");
-		}
+		this.connectorRole = connectorRole;
+		this.configurationRole = configurationRole;
 	}
 	
 	/**
@@ -109,46 +81,17 @@ public class Binding extends Link{
 	 * @param name the name of the binding.
 	 * @param configurationRole the configuration role of the binding.
 	 * @param connectorRole the connector role of the binding.
-	 * @throws BindingException if given connector and configuration are not
-	 * on adjacent hierarchical level or if the given ports doesn't have the same
-	 * type (required or provided).
 	 */
 	public Binding(String name, ConfigurationRole configurationRole, ConnectorRole connectorRole) throws BindingException {
 		this(name, connectorRole, configurationRole);
 	}
 	
 	/**
-	 * @return the component port involved in the binding if there is one,
+	 * Get the interface related to the given one.
+	 * @param iface to search from.
+	 * @return the related interface if it is known,
 	 * null otherwise.
 	 */
-	/*public ComponentPort getComponentPort() {
-		return this.componentPort;
-	}*/
-	
-	/**
-	 * @return the configuration port involved in the binding if there is one,
-	 * null otherwise.
-	 */
-	/*public ConfigurationPort getConfigurationPort() {
-		return this.configurationPort;
-	}*/
-	
-	/**
-	 * @return the connector role involved in the binding if there is one,
-	 * null otherwise.
-	 */
-	/*public ConnectorRole getConnectorRole() {
-		return this.connectorRole;
-	}*/
-	
-	/**
-	 * @return the configuration role involved in the binding if there is one,
-	 * null otherwise.
-	 */
-	/*public ConfigurationRole getConfigurationRole() {
-		return this.configurationRole;
-	}*/
-	
 	public Valuable getBindingOf(Valuable iface) {
 		if(iface.equals(this.componentPort)) {
 			return this.configurationPort;
@@ -164,17 +107,4 @@ public class Binding extends Link{
 		}
 		return null;
 	}
-	
-	/**
-	 * Check if the given interfaces are on adjacent hierarchical levels.
-	 * @param i1 first interface.
-	 * @param i2 second interface.
-	 * @return true if the interfaces are on adjacent levels, false otherwise.
-	 */
-	private boolean checkLevel(Interface i1, Interface i2) {
-		int i1Level = i1.getParent().getLevel();
-		int i2Level = i2.getParent().getLevel();
-		return(i1Level == i2Level+1 || i1Level == i2Level-1);
-	}
-
 }
