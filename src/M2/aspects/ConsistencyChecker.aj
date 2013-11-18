@@ -1,5 +1,7 @@
 package M2.aspects;
 
+import java.util.ArrayList;
+
 import M2.Attachment;
 import M2.Binding;
 import M2.Component;
@@ -17,6 +19,7 @@ import M2.exceptions.ComponentServiceException;
 public aspect ConsistencyChecker {
 	
 	private String ccPrefix = "[Consistency Error] ";
+	private ArrayList<String> usedNames = new ArrayList<String>();
 	
 	Object around(String name, Component parent, ComponentPort[] reqPorts, ComponentPort[] provPorts) : 
 		ComponentService.createService(name, parent, reqPorts, provPorts) {
@@ -89,6 +92,30 @@ public aspect ConsistencyChecker {
 		System.err.println("at " + thisJoinPoint.getSourceLocation().getFileName() + " line " + thisJoinPoint.getSourceLocation().getLine());
 		System.exit(-1);
 		return null;
+	}
+	
+	Object around(String name, Configuration parent) :
+		Connector.createConnector(name,parent) ||
+		Component.createComponent(name,parent) {
+		if(parent == null) {
+			System.err.println(ccPrefix + "Cannot create " + name + " : ");
+			System.err.println("\tEnsure connector parent is not null");
+			System.err.println("at " + thisJoinPoint.getSourceLocation().getFileName() + " line " + thisJoinPoint.getSourceLocation().getLine());
+			System.exit(-1);
+		}
+		return proceed(name,parent);
+	}
+	
+	before(String name) : Element.createElement(name) {
+		if(isUsedName(name)) {
+			System.err.println(ccPrefix + "Cannot create element " + name + " : ");
+			System.err.println("\tAn other element named " + name + " already exists");
+			System.err.println("at " + thisJoinPoint.getSourceLocation().getFileName() + " line " + thisJoinPoint.getSourceLocation().getLine());
+			System.exit(-1);
+		}
+		else {
+			this.usedNames.add(name);
+		}
 	}
 	
 	/**
@@ -178,6 +205,14 @@ public aspect ConsistencyChecker {
 				role1.isToRole() && role2.isToRole());
 	}
 	
+	/**
+	 * Check if the given interfaces can be linked through an
+	 * attachment (ie. prov port / from role or req port / to role).
+	 * @param i1 the first interface.
+	 * @param i2 the second interface.
+	 * @return true if the interfaces can be linked trough an attachment,
+	 * false otherwise.
+	 */
 	private boolean checkInterfaceComplementarity(Interface i1, Interface i2) {
 		ComponentPort port = null;
 		ConnectorRole role = null;
@@ -194,6 +229,17 @@ public aspect ConsistencyChecker {
 		}
 		return((port.isProvPort() && role.isFromRole()) ||
 				(port.isReqPort() && role.isToRole()));
+	}
+	
+	/**
+	 * Check if the given name already represents an element
+	 * name.
+	 * @param name the name to check.
+	 * @return true if the name already corresponds to an element,
+	 * false otherwise.
+	 */
+	private boolean isUsedName(String name) {
+		return(this.usedNames.contains(name));
 	}
 	
 }

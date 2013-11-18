@@ -38,6 +38,10 @@ public abstract class Component extends Element {
 	private Configuration parentConfig;
 	private Configuration subConfig;
 	
+	public pointcut createComponent(String name, Configuration parent) :
+		execution( Component.new(..)) &&
+		args(name,parent);
+	
 	/**
 	 * Create a new component with the given name.
 	 * @param name the name of the component.

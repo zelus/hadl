@@ -39,6 +39,10 @@ public class Connector extends Element {
 	private Configuration subConfig;
 	private ConnectorGlue connectorGlue;
 	
+	public pointcut createConnector(String name, Configuration parent) :
+		execution( Connector.new(..)) &&
+		args(name,parent);
+	
 	/**
 	 * Create a new connector with the given name and parent.
 	 * @param name the name of the connector.

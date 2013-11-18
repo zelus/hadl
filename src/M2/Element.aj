@@ -22,6 +22,10 @@ public class Element {
 	private ArrayList<Constraint> constraints;
 	private ArrayList<Property> properties;
 	
+	public pointcut createElement(String name) :
+		execution( Element.new(..)) &&
+		args(name,..);
+	
 	/**
 	 * Create an element with the given name and the parent.
 	 * @param name the name of the element.
