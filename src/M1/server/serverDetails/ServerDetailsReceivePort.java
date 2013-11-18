@@ -1,4 +1,4 @@
-package M1.server;
+package M1.server.serverDetails;
 
 import M2.Configuration;
 import M2.ConfigurationPort;

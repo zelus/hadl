@@ -16,8 +16,12 @@ public class ClientServerConfiguration extends Configuration {
 		this.addComponent(serverComponent);
 		RpcConnector rpcConnector = new RpcConnector(this);
 		this.addConnector(rpcConnector);
+		
 		this.addAttachment(new Attachment("ClientToRpc", clientComponent.getProvPort("SendRequestPort"), rpcConnector.getFromRole("ClientSenderRole")));
 		this.addAttachment(new Attachment("RpcToServer", rpcConnector.getToRole("ClientReceiverRole"), serverComponent.getReqPort("ServerReceiveRequestPort")));
+		this.addAttachment(new Attachment("RpcToClient", rpcConnector.getToRole("ServerReceiverRole"), clientComponent.getReqPort("ReceiveRequestPort")));
+		this.addAttachment(new Attachment("ServerToRpc", serverComponent.getProvPort("ServerSendRequestPort"), rpcConnector.getFromRole("ServerSenderRole")));
+		
 		this.addProperty(new OneServerAttachment());
 	}
 

@@ -15,11 +15,6 @@ public class App {
 			ClientComponent clientComponent = (ClientComponent)csConfiguration.getComponent("Client");
 			ServerComponent serverComponent = (ServerComponent)csConfiguration.getComponent("Server");
 			
-			System.out.println("csConfiguration sub-components : " + csConfiguration.getComponents().size());
-			
-			/*SendRequestPort clientSendRequestPort = (SendRequestPort)clientComponent.getProvPort("SendRequestPort");
-			clientSendRequestPort.setValue("Test request");*/
-			
 			ClientUserInputPort clientUserInputPort = (ClientUserInputPort)clientComponent.getReqPort("ClientUserInputPort");
 			clientUserInputPort.setValue("Test request");
 			

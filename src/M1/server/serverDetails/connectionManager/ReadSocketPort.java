@@ -1,4 +1,4 @@
-package M1.server;
+package M1.server.serverDetails.connectionManager;
 
 import M2.Component;
 import M2.ComponentPort;
@@ -15,7 +15,7 @@ public class ReadSocketPort extends ComponentPort {
 	@Override
 	public void setValue(Object object) {
 		this.socketBuffer = (String)object;
-		System.out.println("\t[M1 ReadSocketPort updated with value \"" + socketBuffer + "\"");
+		System.out.println("\t[M1] ReadSocketPort updated with value \"" + socketBuffer + "\"");
 	}
 
 	@Override
