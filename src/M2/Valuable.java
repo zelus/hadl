@@ -6,6 +6,7 @@ public interface Valuable {
 	public abstract Object getValue();
 	
 	public Element getParent();
+	
 	public Configuration getParentConfig();
 
 	public void updateFrom(Valuable iface);

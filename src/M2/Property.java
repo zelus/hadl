@@ -4,8 +4,8 @@ package M2;
  * Invariants applied on elements.
  * <p>
  * In HADL properties are invariant constraints that are checked
- * at each runtime step. If a property is not respected during execution
- * then an exception is thrown.
+ * at each runtime step. If a property is not respected
+ * the runtime stop the execution.
  * </p>
  * <p>
  * Use properties when you want to add global and high-level invariants on
@@ -13,7 +13,7 @@ package M2;
  * </p>
  * @author CaterpillarTeam
  */
-public class Property {
+public abstract class Property {
 	
 	private String name;
 	private String description;
@@ -24,11 +24,16 @@ public class Property {
 	 * @param description the informal description of the property.
 	 */
 	public Property(String name, String description) {
-		/*
-		 * TODO change property behavior to allow runtime checking
-		 */
 		this.name = name;
 		this.description = description;
+	}
+	
+	/**
+	 * Create a property with the given name and an empty description.
+	 * @param name the name of the property.
+	 */
+	public Property(String name) {
+		this(name,"");
 	}
 	
 	/**
@@ -43,5 +48,17 @@ public class Property {
 	 */
 	public String getDescription() {
 		return description;
+	}
+	
+	/**
+	 * User-defined invariant checking function.
+	 * @return true if the invariant is respected, false
+	 * otherwise.
+	 */
+	public abstract boolean checkInvariant(Element element);
+	
+	@Override
+	public String toString() {
+		return(name + " : " + description);
 	}
 }
