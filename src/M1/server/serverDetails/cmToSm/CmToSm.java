@@ -18,7 +18,7 @@ public class CmToSm extends Connector {
 		
 		// set the connector glue
 		this.addToRole(connectedRole);
-		this.setGlue(new ConnectorGlue(connecterRole,connectedRole));
+		this.setGlue(new ConnectorGlue(this.getFromRoles(),this.getToRoles()));
 	}
 	
 }

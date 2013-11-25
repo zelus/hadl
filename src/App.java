@@ -24,11 +24,22 @@ public class App {
 			SendMessageService clientSendMessage = (SendMessageService)clientComponent.getProvService("SendMessageService");
 			clientSendMessage.call();
 			
-			// call the sub-component of the server to continue ther propagation
+			// call the sub-component of the server to continue the propagation
 			Configuration serverConfig = serverComponent.getSubConfig();
 			Component connectionManager = serverConfig.getComponent("ConnectionManager");
 			ComponentService delegateChecking = connectionManager.getProvService("DelegateCheckingService");
 			delegateChecking.call();
+			
+			Component securityManager = serverConfig.getComponent("SecurityManager");
+			ComponentService provideAuthService = securityManager.getProvService("ProvideAuthentificationService");
+			provideAuthService.call();
+			
+			Component dbManager = serverConfig.getComponent("DatabaseManager");
+			ComponentService provideQueryService = dbManager.getProvService("ProvideQueryIntegrationService");
+			provideQueryService.call();
+			
+			ComponentService computeResponse = connectionManager.getProvService("ComputeResponseService");
+			computeResponse.call();
 			
 		}catch(Exception e) {
 			System.out.println("Exception during service execution");

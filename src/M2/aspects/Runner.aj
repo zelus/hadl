@@ -98,8 +98,12 @@ public class Runner {
 						/*
 						 * Glue call will call recursively flush operation.
 						 */
-						ConnectorRole toFlush = ((Connector)attachedInterface.getParent()).getGlue().callGlue();
-						this.flushRec(toFlush,null,flushedInterfaces);
+						Collection<ConnectorRole> toFlush = ((Connector)attachedInterface.getParent()).getGlue().callGlue((ConnectorRole)attachedInterface);
+						Iterator<ConnectorRole> toFlushIt = toFlush.iterator();
+						while(toFlushIt.hasNext()) {
+							ConnectorRole iface = toFlushIt.next();
+							this.flushRec(iface, null, flushedInterfaces);
+						}
 					}
 				}
 				/*

@@ -28,10 +28,10 @@ public class ServerDetailsConfiguration extends Configuration {
 		this.addProvPort(sdSendPort);
 		
 		this.addAttachment(new Attachment("NameToCheckToConnector",connectionManager.getProvPort("NameToCheckPort"),cmToSm.getFromRole("ConnecterRole")));
-		this.addAttachment(new Attachment("SecurityAuthToAuthenticator",securityManager.getProvPort("SecurityAuthPort"),cmToSm.getFromRole("AuthenticatorRole")));
 		this.addAttachment(new Attachment("ConnectedToConnectionQuery",securityManager.getReqPort("ConnectionQueryPort"),cmToSm.getToRole("ConnectedRole")));
 		this.addAttachment(new Attachment("AuthenticatedToSecurityCheck",connectionManager.getReqPort("SecurityCheckPort"),cmToSm.getToRole("AuthenticatedRole")));
 		this.addAttachment(new Attachment("SecurityAuthToSecurizer",securityManager.getProvPort("SecurityAuthPort"),smToDb.getFromRole("SecurizerRole")));
+		this.addAttachment(new Attachment("SecurityAuthToAuthenticator",securityManager.getProvPort("SecurityAuthPort"), cmToSm.getFromRole("AuthenticatorRole")));
 		this.addAttachment(new Attachment("SecurizedToSecurityManagement",databaseManager.getReqPort("SecurityManagementPort"),smToDb.getToRole("SecurizedRole")));
 		this.addAttachment(new Attachment("QueryIntegrationToDbConnecter",databaseManager.getProvPort("QueryIntegrationPort"),dbToCm.getFromRole("DbConnectorRole")));
 		this.addAttachment(new Attachment("DbConnectedToDbQuery", connectionManager.getReqPort("DbQueryPort"), dbToCm.getToRole("DbConnectedRole")));

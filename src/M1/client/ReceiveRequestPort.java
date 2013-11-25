@@ -15,6 +15,7 @@ public class ReceiveRequestPort extends ComponentPort {
 	@Override
 	public void setValue(Object msg) {
 		receiveBuffer = (String)msg;
+		System.out.println("\t[M1] " + name + " updated with the value \"" + receiveBuffer + "\"" );
 	}
 
 	@Override

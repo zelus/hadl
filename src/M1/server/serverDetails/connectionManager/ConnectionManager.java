@@ -22,6 +22,9 @@ public class ConnectionManager extends Component {
 		// create component services
 		DelegateCheckingService delegateCheckingService = new DelegateCheckingService(this, new ComponentPort[]{readSocketPort}, new ComponentPort[]{nameToCheck});
 		this.addProvService(delegateCheckingService);
+		
+		ComputeResponseService computeResponseService = new ComputeResponseService(this, new ComponentPort[]{securityCheckPort,dbQueryPort}, new ComponentPort[]{writeSocketPort});
+		this.addProvService(computeResponseService);
 	}
 
 }
